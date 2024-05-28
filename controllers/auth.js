@@ -6,7 +6,7 @@ export const signup = async (req, res) => {
   try {
     const { username, email, password, profilePicture, bio } = req.body;
 
-    if (!username || !email || !password || !profilePicture || !bio) {
+    if (!username || !email || !password || !bio) {
       return res
         .status(400)
         .json({ success: false, message: "All fields are required" });
@@ -32,7 +32,6 @@ export const signup = async (req, res) => {
 
     return res.status(201).json({
       success: true,
-      message: "User created successfully",
       User: {
         id: User._id,
         username: User.username,
@@ -40,6 +39,7 @@ export const signup = async (req, res) => {
         profilePicture: User.profilePicture,
         bio: User.bio,
       },
+      message: "User created successfully",
     });
   } catch (error) {
     console.error(error);
@@ -50,7 +50,6 @@ export const signup = async (req, res) => {
     });
   }
 };
-
 
 export const signin = async (req, res) => {
   try {
@@ -90,11 +89,21 @@ export const signin = async (req, res) => {
     res.cookie("token", token, {
       httpOnly: true,
       secure: true,
-      maxAge: 24 * 60 * 60 * 1000,
+      maxAge: 72 * 60 * 60 * 1000,
     });
-    return res
-      .status(200)
-      .json({ success: true, message: "Login successful", token: token });
+
+    return res.status(200).json({
+      success: true,
+      token: token,
+      user: {
+        id: user._id,
+        username: user.username,
+        email: user.email,
+        profilePicture: user.profilePicture,
+        bio: user.bio,
+      },
+      message: "Login successful",
+    });
   } catch (error) {
     console.error(error);
     return res.status(500).json({
