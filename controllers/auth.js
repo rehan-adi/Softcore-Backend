@@ -113,3 +113,26 @@ export const signin = async (req, res) => {
     });
   }
 };
+
+
+export const logout = (req, res) => {
+  try {
+    // Clear the token from client's cookies
+    res.clearCookie("token", {
+      httpOnly: true,
+      sameSite: "strict",
+    });
+
+    return res.status(200).json({
+      success: true,
+      message: "Logout successful",
+    });
+  } catch (error) {
+    console.error("Error during logout:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Failed to log out",
+      error: error.message,
+    });
+  }
+};
