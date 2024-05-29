@@ -2,7 +2,7 @@ import express from 'express';
 import { createBlog, getAllBlogPosts, updateBlog, deleteBlog } from '../controllers/blog.js';
 
 //middlware to check login
-import checkLogin from '../middleware/auth.middleware.js'
+import {checkLogin} from '../middleware/auth.middleware.js'
 
 const blogRouter = express.Router();
 

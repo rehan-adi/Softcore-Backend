@@ -45,12 +45,24 @@ export const createBlog = async (req, res) => {
 
 // get all blog
 export const getAllBlogPosts = async (req, res) => {
+
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 4;
+  const skip = (page - 1) * limit;
+
   try {
-    const allBlogPosts = await postModel.find();
+    const allBlogPosts = await postModel.find().skip(skip).limit(limit);
+    const totalBlogPosts = await postModel.countDocuments();
     return res.status(200).json({
       success: true,
       data: {
         blogPost: allBlogPosts,
+      },
+      pagination: {
+        total: totalBlogPosts,
+        page,
+        limit,
+        totalPages: Math.ceil(totalBlogs / limit),
       },
       message: "All blogs retrieved successfully",
     });
