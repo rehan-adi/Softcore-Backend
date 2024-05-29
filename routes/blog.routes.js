@@ -1,4 +1,5 @@
 import express from 'express';
+import upload from '../utils/multer.js'
 import { createBlog, getAllBlogPosts, updateBlog, deleteBlog } from '../controllers/blog.js';
 
 //middlware to check login
@@ -7,7 +8,7 @@ import {checkLogin} from '../middleware/auth.middleware.js'
 const blogRouter = express.Router();
 
 // Route to create a new blog post, requires user to be logged in
-blogRouter.post('/create', checkLogin, createBlog);
+blogRouter.post('/create', checkLogin, upload.single('image'), createBlog);
 
 // Route to get all blog posts
 blogRouter.get('/allblogs', getAllBlogPosts);
