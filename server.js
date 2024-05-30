@@ -6,6 +6,7 @@ import dbConnect from './config/dbConnect.js';
 
 import authRouter from './routes/auth.routes.js';
 import blogRouter from './routes/blog.routes.js';
+import commentRouter from './routes/comment.routes.js';
 
 env.config();
 const server = express();
@@ -20,8 +21,9 @@ server.use(express.json());
 server.use(cors());
 
 // routes 
-server.use('/api', authRouter);
-server.use('/blog', blogRouter);
+server.use('/api/auth', authRouter);
+server.use('/api/blogs', blogRouter);
+server.use('/api/comments', commentRouter);
 
 server.listen(process.env.PORT || 3333, () => {
     console.log(`Server listening on ${process.env.PORT}`);

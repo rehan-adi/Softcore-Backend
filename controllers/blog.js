@@ -3,9 +3,12 @@ import postModel from "../models/post.model.js";
 // create a new blog
 export const createBlog = async (req, res) => {
   try {
-    const { title, content, author, image, tags, category } = req.body;
+    const { title, content, tags, category } = req.body;
+    const { image } = req.file;
 
-    if (!title || !content || !author || !category) {
+    const author = req.user._id;
+
+    if (!title || !content || !tags || !category) {
       return res.status(400).json({
         success: false,
         message: "All fields are required",
