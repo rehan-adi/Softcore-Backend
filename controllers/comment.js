@@ -1,6 +1,6 @@
 import commentModel from "../models/comment.model.js";
 import postModel from "../models/post.model.js";
-import userModel from "../models/user.model.js";
+import userModel from "../models/Blog_user.model.js";
 
 export const createComment = async (req, res) => {
   try {

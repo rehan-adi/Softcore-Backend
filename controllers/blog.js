@@ -4,9 +4,9 @@ import postModel from "../models/post.model.js";
 export const createBlog = async (req, res) => {
   try {
     const { title, content, tags, category } = req.body;
-    const { image } = req.file;
 
-    const author = req.user._id;
+    const image = req.file ? req.file.path : null;
+    const author = req.user.id;
 
     if (!title || !content || !tags || !category) {
       return res.status(400).json({
@@ -65,7 +65,7 @@ export const getAllBlogPosts = async (req, res) => {
         total: totalBlogPosts,
         page,
         limit,
-        totalPages: Math.ceil(totalBlogs / limit),
+        totalPages: Math.ceil(totalBlogPosts / limit),
       },
       message: "All blogs retrieved successfully",
     });
