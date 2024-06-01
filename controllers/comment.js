@@ -8,11 +8,11 @@ export const createComment = async (req, res) => {
     const { authorId, content } = req.body;
 
     if (!authorId || !content) {
-        return res.status(400).json({
-          success: false,
-          message: "Author ID and content are required",
-        });
-      }
+      return res.status(400).json({
+        success: false,
+        message: "Author ID and content are required",
+      });
+    }
 
     const post = await postModel.findById(postId);
     const user = await userModel.findById(authorId);
@@ -50,15 +50,16 @@ export const createComment = async (req, res) => {
   }
 };
 
-
-export const getAllComments = async(req, res) => {
+export const getAllComments = async (req, res) => {
   try {
-    const allComment = await commentModel.find().populate("author", 'username profilePicture');
+    const allComment = await commentModel
+      .find()
+      .populate("author", "username profilePicture");
     return res.status(200).json({
       success: true,
       comments: {
-        allComment: allComment
-      }
+        allComment: allComment,
+      },
     });
   } catch (error) {
     console.error(error);
@@ -68,4 +69,84 @@ export const getAllComments = async(req, res) => {
       error: error.message,
     });
   }
-}
+};
+
+export const updateComment = async (req, res) => {
+  try {
+    const commentId = req.params.id;
+    const { content } = req.body;
+
+    if (!content) {
+      return res.status(400).json({
+        success: false,
+        message: "Content is required",
+      });
+    }
+
+    const updatedComment = await commentModel.findByIdAndUpdate(
+      commentId,
+      { content },
+      {
+        new: true,
+      }
+    );
+
+    if (!updatedComment) {
+      return res.status(404).json({
+        success: false,
+        message: "Comment not found",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      comment: {
+        id: updatedComment._id,
+        post: updatedComment.post,
+        author: updatedComment.author,
+        content: updatedComment.content,
+      },
+      message: "Comment updated",
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      success: false,
+      message: "Failed to update comment",
+      error: error.message,
+    });
+  }
+};
+
+export const deleteComments = async (req, res) => {
+  try {
+    const commentId = req.params.id;
+
+    const deletedComment = await commentModel.findByIdAndDelete(commentId);
+
+    if (!deletedComment) {
+      return res
+        .status(404)
+        .send({ success: false, message: "Comment not found" });
+    }
+
+    return res.status(200).json({
+      success: true,
+      comment: {
+        id: deletedComment._id,
+        post: deletedComment.post,
+        author: deletedComment.author,
+        content: deletedComment.content,
+      },
+      message: "Comment deleted",
+    });
+
+  } catch (error) {
+    console.error(`Failed to delete comment with id ${req.params.id}:`, error);
+    return res.status(500).json({
+      success: false,
+      message: "Failed to delete comment",
+      error: error.message,
+    });
+  }
+};
