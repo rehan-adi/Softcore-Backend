@@ -73,7 +73,7 @@ export const getAllComments = async (req, res) => {
 
 export const updateComment = async (req, res) => {
   try {
-    const commentId = req.params.id;
+    const commentId = req.params.commentId;
     const { content } = req.body;
 
     if (!content) {
@@ -120,7 +120,7 @@ export const updateComment = async (req, res) => {
 
 export const deleteComments = async (req, res) => {
   try {
-    const commentId = req.params.id;
+    const commentId = req.params.commentId;
 
     const deletedComment = await commentModel.findByIdAndDelete(commentId);
 
