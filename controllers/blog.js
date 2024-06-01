@@ -83,7 +83,22 @@ export const getAllBlogPosts = async (req, res) => {
 export const updateBlog = async (req, res) => {
   try {
     const postId = req.params.id;
+    const userId = req.user.id; 
     const { body } = req;
+
+    const post = await postModel.findById(postId);
+    if (!post) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Failed to update: Post not found" });
+    }
+
+    if (post.author.toString() !== userId) {
+      return res
+        .status(403)
+        .json({ success: false, message: "You are not authorized to update this post" });
+    }
+
     const updatedPost = await postModel.findByIdAndUpdate(postId, body, {
       new: true,
     });
@@ -115,11 +130,25 @@ export const updateBlog = async (req, res) => {
 export const deleteBlog = async (req, res) => {
   try {
     const postId = req.params.id;
+    const userId = req.user.id;
 
     if (!mongoose.Types.ObjectId.isValid(postId)) {
       return res
         .status(400)
         .json({ success: false, message: "Invalid post ID" });
+    }
+
+    const post = await postModel.findById(postId);
+    if (!post) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Failed to delete: Post not found" });
+    }
+
+    if (post.author.toString() !== userId) {
+      return res
+        .status(403)
+        .json({ success: false, message: "You are not authorized to delete this post" });
     }
 
     const deletePost = await postModel.findByIdAndDelete(postId);
