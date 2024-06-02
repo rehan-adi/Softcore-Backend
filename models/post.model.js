@@ -22,9 +22,8 @@ const postSchema = new mongoose.Schema(
     likes: [{ type: mongoose.Schema.Types.ObjectId, ref: "Blog_user_model" }],
     tags: [{ type: String, trim: true }],
     category: {
-      type: String,
-      trim: true,
-      maxlength: [50, "Category cannot exceed 50 characters"],
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Blog_category_model"
     },
   },
   { timestamps: true }
