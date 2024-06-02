@@ -11,12 +11,20 @@ export const like = async (req, res) => {
     }
 
     // Check if the user has already liked the post
-    if (!post.likes.includes(userId)) {
-      post.likes.push(userId);
-      await post.save();
+    if (post.likes.includes(userId)) {
+      return res
+        .status(400)
+        .json({ error: "User has already liked this post" });
     }
 
-    res.json(post);
+    post.likes.push(userId);
+    await post.save();
+
+    res.json({
+      success: true,
+      post,
+      totalLikes: post.likes.length,
+    });
   } catch (error) {
     console.error(error);
     return res.status(500).json({
