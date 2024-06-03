@@ -1,6 +1,8 @@
 import userModel from "../models/Blog_user.model.js";
 import postModel from "../models/post.model.js";
 
+
+// create profile 
 export const getProfile = async (req, res) => {
   try {
     const userId = req.user.id;
@@ -31,6 +33,7 @@ export const getProfile = async (req, res) => {
   }
 };
 
+// update profile
 export const updateProfile = async (req, res) => {
   try {
     const { username, bio } = req.body;
@@ -70,4 +73,35 @@ export const updateProfile = async (req, res) => {
       error: error.message,
     });
   }
+};
+
+// get other users profile
+export const getUsersProfile = async(req, res) => {
+   try {
+     const userId = req.params.id;
+     const profile = await userModel.findById(userId);
+
+     if(!profile) {
+       return res.status(404).json({
+         success: false,
+         message: "User Profile not found",
+       });
+     };
+
+     const userPosts = await postModel.find({ author: userId });
+
+     return res.status(200).json({
+       success: true,
+       profile: profile,
+       posts: userPosts,
+     });
+
+   } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      success: false,
+      message: "Failed to get profile",
+      error: error.message,
+    });
+   }
 };
