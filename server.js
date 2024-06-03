@@ -8,6 +8,7 @@ import authRouter from './routes/auth.routes.js';
 import blogRouter from './routes/blog.routes.js';
 import commentRouter from './routes/comment.routes.js';
 import likeRouter from './routes/like.routes.js';
+import profileRouter from './routes/profile.routes.js';
 
 env.config();
 const server = express();
@@ -26,6 +27,7 @@ server.use('/api/auth', authRouter);
 server.use('/api/blogs', blogRouter);
 server.use('/api/comments', commentRouter);
 server.use('/api/likes', likeRouter);
+server.use('/api/profile', profileRouter);
 
 server.listen(process.env.PORT || 3333, () => {
     console.log(`Server listening on ${process.env.PORT}`);
