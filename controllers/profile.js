@@ -33,7 +33,8 @@ export const getProfile = async (req, res) => {
 
 export const updateProfile = async (req, res) => {
   try {
-    const { username, profilePicture, bio } = req.body;
+    const { username, bio } = req.body;
+    const image = req.file ? req.file.path : null;
     const userId = req.user.id;
     const profile = await userModel.findById(userId);
 
@@ -46,7 +47,7 @@ export const updateProfile = async (req, res) => {
 
     const updatedProfileData = {
       ...(username && { username }), // Update username if provided
-      ...(profilePicture && { profilePicture }), // Update profile picture if provided
+      ...(image && { image }), // Update profile picture if provided
       ...(bio && { bio }), // Update bio if provided
     };
 
