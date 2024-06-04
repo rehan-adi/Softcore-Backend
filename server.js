@@ -3,6 +3,7 @@ import env from 'dotenv'
 import cors from 'cors'
 import cookieParser from 'cookie-parser';
 import dbConnect from './config/dbConnect.js';
+import passport from './config/passport.js'
 
 import authRouter from './routes/auth.routes.js';
 import blogRouter from './routes/blog.routes.js';
@@ -22,6 +23,9 @@ dbConnect();
 server.use(cookieParser()); 
 server.use(express.json());
 server.use(cors());
+
+// Initialize passport
+server.use(passport.initialize());
 
 // routes 
 server.use('/api/auth', authRouter);

@@ -15,9 +15,14 @@ const userSchema = new mongoose.Schema(
       unique: true,
       match: [/.+\@.+\..+/, "Please enter a valid email address"],
     },
+    googleId: {
+      type: String,
+      unique: true,
+      sparse: true,
+    },
     password: {
       type: String,
-      required: [true, "Password is required"],
+      required: function () { return !this.googleId; },
     },
     profilePicture: {
       type: String,
