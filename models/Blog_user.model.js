@@ -29,6 +29,8 @@ const userSchema = new mongoose.Schema(
       default:
         "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQWC2HlBW_j95D0IfAqW5Ub0yp1aNnx0ixFmg&s",
     },
+    followers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Blog_user_model' }],
+    following: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Blog_user_model' }],
     bio: { type: String, trim: true },
   },
   { timestamps: true }
