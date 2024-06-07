@@ -10,9 +10,9 @@ authRouter.get("/logout", logout);
 
 // Google OAuth routes
 authRouter.get('/google', passport.authenticate('google', { scope: ['profile', 'email'], session: false }));
-authRouter.get('/google/callback', passport.authenticate('google', { failureRedirect: '/', session: false }), (req, res) => {
+authRouter.get('/google/callback', passport.authenticate('google', { failureRedirect: '/error', session: false }), (req, res) => {
   const token = req.user.token;
-  res.redirect(`/dashboard?token=${token}`);
+  res.redirect(`/?token=${token}`);
 });
 
 
