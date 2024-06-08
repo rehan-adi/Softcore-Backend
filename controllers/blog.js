@@ -63,7 +63,7 @@ export const getAllBlogPosts = async (req, res) => {
   try {
     const allBlogPosts = await postModel.find().skip(skip).limit(limit).populate({
       path: "author",
-      select: "username",
+      select: "username profilePicture",
       model: "Blog_user_model",
     }).populate('category', 'name');
     const totalBlogPosts = await postModel.countDocuments();
