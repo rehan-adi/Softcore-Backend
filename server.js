@@ -1,6 +1,8 @@
 import express from 'express';
 import env from 'dotenv'
 import cors from 'cors'
+import { fileURLToPath } from "url";
+import { dirname, join } from "path";
 import cookieParser from 'cookie-parser';
 import dbConnect from './config/dbConnect.js';
 import passport from './config/passport.js'
@@ -14,6 +16,10 @@ import searchRouter from './routes/search.routes.js';
 import followRouter from './routes/follow.routes.js';
 
 env.config();
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
 const server = express();
 
 // database connection
@@ -24,6 +30,7 @@ dbConnect();
 server.use(cookieParser()); 
 server.use(express.json());
 server.use(cors());
+server.use('/uploads', express.static(join(__dirname, 'uploads')));
 
 // Initialize passport
 server.use(passport.initialize());

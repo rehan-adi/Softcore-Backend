@@ -57,11 +57,15 @@ export const createBlog = async (req, res) => {
 // get all blog
 export const getAllBlogPosts = async (req, res) => {
   const page = parseInt(req.query.page) || 1;
-  const limit = parseInt(req.query.limit) || 4;
+  const limit = parseInt(req.query.limit) || 5;
   const skip = (page - 1) * limit;
 
   try {
-    const allBlogPosts = await postModel.find().skip(skip).limit(limit).populate('category', 'name');
+    const allBlogPosts = await postModel.find().skip(skip).limit(limit).populate({
+      path: "author",
+      select: "username",
+      model: "Blog_user_model",
+    }).populate('category', 'name');
     const totalBlogPosts = await postModel.countDocuments();
     return res.status(200).json({
       success: true,
