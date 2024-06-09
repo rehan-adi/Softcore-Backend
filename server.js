@@ -26,10 +26,17 @@ const server = express();
 dbConnect();
 
 
+// CORS options
+const corsOptions = {
+    origin: 'http://localhost:5173',
+    credentials: true,
+  };
+
+
 // Middleware's
 server.use(cookieParser()); 
 server.use(express.json());
-server.use(cors());
+server.use(cors(corsOptions));
 server.use('/uploads', express.static(join(__dirname, 'uploads')));
 
 // Initialize passport
