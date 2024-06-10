@@ -1,5 +1,6 @@
 import postModel from "../models/post.model.js";
 import categoryModel from "../models/category.model.js";
+import mongoose from "mongoose";
 
 // create a new blog
 export const createBlog = async (req, res) => {

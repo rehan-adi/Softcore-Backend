@@ -87,9 +87,10 @@ export const signin = async (req, res) => {
     );
 
     res.cookie("token", token, {
-      httpOnly: true,
-      secure: true,
       maxAge: 72 * 60 * 60 * 1000,
+      httpOnly: true,
+      secure: false,
+      sameSite: 'none',
     });
 
     return res.status(200).json({
