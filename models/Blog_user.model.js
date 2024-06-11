@@ -7,6 +7,11 @@ const userSchema = new mongoose.Schema(
       trim: true,
       required: true,
     },
+    fullname: {
+      type: String,
+      trim: true,
+      required: true,
+    },
     email: {
       type: String,
       required: [true, "email is required"],
@@ -23,6 +28,7 @@ const userSchema = new mongoose.Schema(
     password: {
       type: String,
       required: function () { return !this.googleId; },
+      minlength: [6, "Password must be at least 6 characters long"],
     },
     profilePicture: {
       type: String,

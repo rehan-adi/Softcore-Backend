@@ -4,9 +4,9 @@ import jwt from "jsonwebtoken";
 
 export const signup = async (req, res) => {
   try {
-    const { username, email, password, profilePicture, bio } = req.body;
+    const { username, fullname, email, password, profilePicture, bio } = req.body;
 
-    if (!username || !email || !password || !bio) {
+    if (!username || !fullname || !email || !password || !bio) {
       return res
         .status(400)
         .json({ success: false, message: "All fields are required" });
@@ -24,6 +24,7 @@ export const signup = async (req, res) => {
 
     const User = await userModel.create({
       username,
+      fullname,
       email,
       password: hashpassword,
       profilePicture,
@@ -35,6 +36,7 @@ export const signup = async (req, res) => {
       User: {
         id: User._id,
         username: User.username,
+        fullname: User.fullname,
         email: User.email,
         profilePicture: User.profilePicture,
         bio: User.bio,
