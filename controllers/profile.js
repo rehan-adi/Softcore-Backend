@@ -7,7 +7,7 @@ export const getProfile = async (req, res) => {
   try {
     const userId = req.user.id;
 
-    const checkProfile = await userModel.findById(userId);
+    const checkProfile = await userModel.findById(userId).select("-password");
 
     if (!checkProfile) {
       return res.status(404).json({
@@ -21,6 +21,7 @@ export const getProfile = async (req, res) => {
     return res.status(200).json({
       success: true,
       profile: checkProfile,
+      postCount: userPosts.length,
       posts: userPosts,
     });
   } catch (error) {
