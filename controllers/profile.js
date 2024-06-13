@@ -16,7 +16,7 @@ export const getProfile = async (req, res) => {
       });
     }
 
-    const userPosts = await postModel.find({ author: userId });
+    const userPosts = await postModel.find({ author: userId }).populate('author', 'username profilePicture fullname');
 
     return res.status(200).json({
       success: true,
