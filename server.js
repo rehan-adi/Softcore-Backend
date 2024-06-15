@@ -14,6 +14,7 @@ import likeRouter from './routes/like.routes.js';
 import profileRouter from './routes/profile.routes.js';
 import searchRouter from './routes/search.routes.js';
 import followRouter from './routes/follow.routes.js';
+import paymentRoute from './routes/payment.routes.js';
 
 env.config();
 
@@ -50,6 +51,7 @@ server.use('/api/likes', likeRouter);
 server.use('/api/profile', profileRouter);
 server.use('/api/search', searchRouter);
 server.use('/api/user', followRouter);
+server.use('/api/payment', paymentRoute);
 
 server.listen(process.env.PORT || 3333, () => {
     console.log(`Server listening on ${process.env.PORT}`);
