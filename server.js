@@ -1,6 +1,9 @@
 import express from 'express';
 import env from 'dotenv'
 import cors from 'cors'
+import helmet from 'helmet'
+import morgan from 'morgan';
+import ratelimit from 'express-rate-limit'
 import { fileURLToPath } from "url";
 import { dirname, join } from "path";
 import cookieParser from 'cookie-parser';
@@ -16,6 +19,7 @@ import searchRouter from './routes/search.routes.js';
 import followRouter from './routes/follow.routes.js';
 import paymentRoute from './routes/payment.routes.js';
 
+// env config
 env.config();
 
 const __filename = fileURLToPath(import.meta.url);
@@ -26,18 +30,26 @@ const server = express();
 // database connection
 dbConnect();
 
-
-// CORS options
+// Rate limiting configuration
 const corsOptions = {
-    origin: 'http://localhost:5173',
-    credentials: true,
-  };
+  origin: 'http://localhost:5173',
+  credentials: true,
+};
 
+// Rate limiting configuration
+const limit = ratelimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // limit each IP to 100 requests per windowMs
+   message: 'Too many requests from this IP, please try again after 15 minutes'
+});
 
 // Middleware's
-server.use(cookieParser()); 
+server.use(cookieParser());
 server.use(express.json());
 server.use(cors(corsOptions));
+server.use(helmet());
+server.use(morgan('dev'));
+server.use(limit);
 server.use('/uploads', express.static(join(__dirname, 'uploads')));
 
 // Initialize passport
@@ -54,5 +66,5 @@ server.use('/api/user', followRouter);
 server.use('/api/payment', paymentRoute);
 
 server.listen(process.env.PORT || 3333, () => {
-    console.log(`Server listening on ${process.env.PORT}`);
+  console.log(`Server listening on ${process.env.PORT}`);
 })

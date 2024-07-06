@@ -7,6 +7,7 @@ const dbConnect = async (req, res) => {
   } catch (error) {
     console.error(`DB Connection Failed`);
     console.error(error);
+    process.exit(1);
   }
 };
 
