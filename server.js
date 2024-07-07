@@ -47,7 +47,7 @@ const limit = ratelimit({
 server.use(cookieParser());
 server.use(express.json());
 server.use(cors(corsOptions));
-server.use(helmet());
+// server.use(helmet());
 server.use(morgan('dev'));
 server.use(limit);
 server.use('/uploads', express.static(join(__dirname, 'uploads')));
@@ -57,7 +57,7 @@ server.use(passport.initialize());
 
 // routes 
 server.use('/api/auth', authRouter);
-server.use('/api/blogs', blogRouter);
+server.use('/api/blogs', blogRouter); 
 server.use('/api/comments', commentRouter);
 server.use('/api/likes', likeRouter);
 server.use('/api/profile', profileRouter);
