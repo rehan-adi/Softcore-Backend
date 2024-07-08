@@ -1,6 +1,11 @@
 import express from 'express';
-import { followUser, unfollowUser, getFollowingList, getFollowersList } from '../controllers/follow.js'
-import {checkLogin} from '../middleware/auth.middleware.js'
+import {
+  followUser,
+  unfollowUser,
+  getFollowingList,
+  getFollowersList,
+} from '../controllers/follow.js';
+import { checkLogin } from '../middleware/auth.middleware.js';
 
 const followRouter = express.Router();
 

@@ -1,14 +1,14 @@
 import express from 'express';
-import env from 'dotenv'
-import cors from 'cors'
-import helmet from 'helmet'
+import env from 'dotenv';
+import cors from 'cors';
+import helmet from 'helmet';
 import morgan from 'morgan';
-import ratelimit from 'express-rate-limit'
-import { fileURLToPath } from "url";
-import { dirname, join } from "path";
+import ratelimit from 'express-rate-limit';
+import { fileURLToPath } from 'url';
+import { dirname, join } from 'path';
 import cookieParser from 'cookie-parser';
 import dbConnect from './config/dbConnect.js';
-import passport from './config/passport.js'
+import passport from './config/passport.js';
 
 import authRouter from './routes/auth.routes.js';
 import blogRouter from './routes/blog.routes.js';
@@ -40,7 +40,7 @@ const corsOptions = {
 const limit = ratelimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
   max: 100, // limit each IP to 100 requests per windowMs
-   message: 'Too many requests from this IP, please try again after 15 minutes'
+  message: 'Too many requests from this IP, please try again after 15 minutes',
 });
 
 // Middleware's
@@ -55,9 +55,9 @@ server.use('/uploads', express.static(join(__dirname, 'uploads')));
 // Initialize passport
 server.use(passport.initialize());
 
-// routes 
+// routes
 server.use('/api/auth', authRouter);
-server.use('/api/blogs', blogRouter); 
+server.use('/api/blogs', blogRouter);
 server.use('/api/comments', commentRouter);
 server.use('/api/likes', likeRouter);
 server.use('/api/profile', profileRouter);
@@ -67,4 +67,4 @@ server.use('/api/payment', paymentRoute);
 
 server.listen(process.env.PORT || 3333, () => {
   console.log(`Server listening on ${process.env.PORT}`);
-})
+});

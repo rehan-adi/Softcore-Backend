@@ -1,6 +1,6 @@
-import commentModel from "../models/comment.model.js";
-import postModel from "../models/post.model.js";
-import userModel from "../models/Blog_user.model.js";
+import commentModel from '../models/comment.model.js';
+import postModel from '../models/post.model.js';
+import userModel from '../models/Blog_user.model.js';
 
 export const createComment = async (req, res) => {
   try {
@@ -10,7 +10,7 @@ export const createComment = async (req, res) => {
     if (!authorId || !content) {
       return res.status(400).json({
         success: false,
-        message: "Author ID and content are required",
+        message: 'Author ID and content are required',
       });
     }
 
@@ -20,7 +20,7 @@ export const createComment = async (req, res) => {
     if (!post || !user) {
       return res.status(404).json({
         success: false,
-        message: "Post or user not found",
+        message: 'Post or user not found',
       });
     }
 
@@ -38,13 +38,13 @@ export const createComment = async (req, res) => {
         author: comment.author,
         content: comment.content,
       },
-      message: "Comment created",
+      message: 'Comment created',
     });
   } catch (error) {
     console.error(error);
     return res.status(500).json({
       success: false,
-      message: "Failed to add comment",
+      message: 'Failed to add comment',
       error: error.message,
     });
   }
@@ -54,7 +54,7 @@ export const getAllComments = async (req, res) => {
   try {
     const allComment = await commentModel
       .find()
-      .populate("author", "username profilePicture");
+      .populate('author', 'username profilePicture');
     return res.status(200).json({
       success: true,
       comments: {
@@ -65,7 +65,7 @@ export const getAllComments = async (req, res) => {
     console.error(error);
     return res.status(500).json({
       success: false,
-      message: "Failed to get comment",
+      message: 'Failed to get comment',
       error: error.message,
     });
   }
@@ -80,20 +80,25 @@ export const updateComment = async (req, res) => {
     if (!content) {
       return res.status(400).json({
         success: false,
-        message: "Content is required",
+        message: 'Content is required',
       });
     }
 
     const comment = await commentModel.findById(commentId);
 
-    if(!comment) {
-      return res.status(404).json({success: false, message: "Comment not found"})
+    if (!comment) {
+      return res
+        .status(404)
+        .json({ success: false, message: 'Comment not found' });
     }
 
-    if(comment.author.toString() != userId) {
+    if (comment.author.toString() != userId) {
       return res
-      .status(403)
-      .json({ success: false, message: "You are not authorized to update this comment" });
+        .status(403)
+        .json({
+          success: false,
+          message: 'You are not authorized to update this comment',
+        });
     }
 
     const updatedComment = await commentModel.findByIdAndUpdate(
@@ -107,7 +112,7 @@ export const updateComment = async (req, res) => {
     if (!updatedComment) {
       return res.status(404).json({
         success: false,
-        message: "Comment not found",
+        message: 'Comment not found',
       });
     }
 
@@ -119,13 +124,13 @@ export const updateComment = async (req, res) => {
         author: updatedComment.author,
         content: updatedComment.content,
       },
-      message: "Comment updated",
+      message: 'Comment updated',
     });
   } catch (error) {
     console.error(error);
     return res.status(500).json({
       success: false,
-      message: "Failed to update comment",
+      message: 'Failed to update comment',
       error: error.message,
     });
   }
@@ -137,14 +142,19 @@ export const deleteComments = async (req, res) => {
     const userId = req.user.id;
 
     const comment = await commentModel.findById(commentId);
-    if(!comment) {
-      return res.status(404).json({success: false, message: "Comment not found"})
+    if (!comment) {
+      return res
+        .status(404)
+        .json({ success: false, message: 'Comment not found' });
     }
 
-    if(comment.author.toString() != userId) {
+    if (comment.author.toString() != userId) {
       return res
-      .status(403)
-      .json({ success: false, message: "You are not authorized to delete this comment" });
+        .status(403)
+        .json({
+          success: false,
+          message: 'You are not authorized to delete this comment',
+        });
     }
 
     const deletedComment = await commentModel.findByIdAndDelete(commentId);
@@ -152,7 +162,7 @@ export const deleteComments = async (req, res) => {
     if (!deletedComment) {
       return res
         .status(404)
-        .send({ success: false, message: "Comment not found" });
+        .send({ success: false, message: 'Comment not found' });
     }
 
     return res.status(200).json({
@@ -163,14 +173,13 @@ export const deleteComments = async (req, res) => {
         author: deletedComment.author,
         content: deletedComment.content,
       },
-      message: "Comment deleted",
+      message: 'Comment deleted',
     });
-
   } catch (error) {
     console.error(`Failed to delete comment with id ${req.params.id}:`, error);
     return res.status(500).json({
       success: false,
-      message: "Failed to delete comment",
+      message: 'Failed to delete comment',
       error: error.message,
     });
   }

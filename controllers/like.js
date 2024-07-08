@@ -1,4 +1,4 @@
-import postModel from "../models/post.model.js";
+import postModel from '../models/post.model.js';
 
 export const like = async (req, res) => {
   try {
@@ -7,14 +7,14 @@ export const like = async (req, res) => {
 
     const post = await postModel.findById(postId);
     if (!post) {
-      return res.status(404).json({ error: "Post not found" });
+      return res.status(404).json({ error: 'Post not found' });
     }
 
     // Check if the user has already liked the post
     if (post.likes.includes(userId)) {
       return res
         .status(400)
-        .json({ error: "User has already liked this post" });
+        .json({ error: 'User has already liked this post' });
     }
 
     post.likes.push(userId);
@@ -29,7 +29,7 @@ export const like = async (req, res) => {
     console.error(error);
     return res.status(500).json({
       success: false,
-      message: "Failed to like",
+      message: 'Failed to like',
       error: error.message,
     });
   }

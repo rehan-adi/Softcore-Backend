@@ -26,5 +26,8 @@
     "passport": "^0.7.0",
     "passport-google-oauth20": "^2.0.0",
     "razorpay": "^2.9.4"
+  },
+  "devDependencies": {
+    "prettier": "^3.3.2"
   }
 }

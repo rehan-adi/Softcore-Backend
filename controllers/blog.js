@@ -1,6 +1,6 @@
-import postModel from "../models/post.model.js";
-import categoryModel from "../models/category.model.js";
-import mongoose from "mongoose";
+import postModel from '../models/post.model.js';
+import categoryModel from '../models/category.model.js';
+import mongoose from 'mongoose';
 
 // create a new blog
 export const createBlog = async (req, res) => {
@@ -13,7 +13,7 @@ export const createBlog = async (req, res) => {
     if (!title || !content || !tags || !category) {
       return res.status(400).json({
         success: false,
-        message: "All fields are required",
+        message: 'All fields are required',
       });
     }
 
@@ -43,13 +43,13 @@ export const createBlog = async (req, res) => {
         tags: newBlog.tags,
         category: categoryName.name,
       },
-      message: "Blog created successfully",
+      message: 'Blog created successfully',
     });
   } catch (error) {
     console.error(error);
     return res.status(500).json({
       success: false,
-      message: "Failed to create blog",
+      message: 'Failed to create blog',
       error: error.message,
     });
   }
@@ -62,11 +62,16 @@ export const getAllBlogPosts = async (req, res) => {
   const skip = (page - 1) * limit;
 
   try {
-    const allBlogPosts = await postModel.find().skip(skip).limit(limit).populate({
-      path: "author",
-      select: "username profilePicture fullname",
-      model: "Blog_user_model",
-    }).populate('category', 'name');
+    const allBlogPosts = await postModel
+      .find()
+      .skip(skip)
+      .limit(limit)
+      .populate({
+        path: 'author',
+        select: 'username profilePicture fullname',
+        model: 'Blog_user_model',
+      })
+      .populate('category', 'name');
     const totalBlogPosts = await postModel.countDocuments();
     return res.status(200).json({
       success: true,
@@ -79,13 +84,13 @@ export const getAllBlogPosts = async (req, res) => {
         limit,
         totalPages: Math.ceil(totalBlogPosts / limit),
       },
-      message: "All blogs retrieved successfully",
+      message: 'All blogs retrieved successfully',
     });
   } catch (error) {
     console.error(error);
     return res.status(500).json({
       success: false,
-      message: "Failed to get all blog posts",
+      message: 'Failed to get all blog posts',
       error: error.message,
     });
   }
@@ -101,27 +106,27 @@ export const getPostsByCategory = async (req, res) => {
     if (!categoryExists) {
       return res.status(404).json({
         success: false,
-        message: "Category not found",
+        message: 'Category not found',
       });
     }
 
     const posts = await postModel
       .find({ category: categoryId })
-      .populate("author", "name")
-      .populate("category", "name");
+      .populate('author', 'name')
+      .populate('category', 'name');
 
     return res.status(200).json({
       success: true,
       data: {
         posts,
       },
-      message: "Posts retrieved successfully",
+      message: 'Posts retrieved successfully',
     });
   } catch (error) {
     console.error(error);
     return res.status(500).json({
       success: false,
-      message: "Failed to get posts by category",
+      message: 'Failed to get posts by category',
       error: error.message,
     });
   }
@@ -138,16 +143,14 @@ export const updateBlog = async (req, res) => {
     if (!post) {
       return res
         .status(404)
-        .json({ success: false, message: "Failed to update: Post not found" });
+        .json({ success: false, message: 'Failed to update: Post not found' });
     }
 
     if (post.author.toString() !== userId) {
-      return res
-        .status(403)
-        .json({
-          success: false,
-          message: "You are not authorized to update this post",
-        });
+      return res.status(403).json({
+        success: false,
+        message: 'You are not authorized to update this post',
+      });
     }
 
     const updatedPost = await postModel.findByIdAndUpdate(postId, body, {
@@ -157,7 +160,7 @@ export const updateBlog = async (req, res) => {
     if (!updatedPost) {
       return res
         .status(404)
-        .json({ success: false, message: "Failed to update: Post not found" });
+        .json({ success: false, message: 'Failed to update: Post not found' });
     }
 
     return res.status(200).json({
@@ -165,13 +168,13 @@ export const updateBlog = async (req, res) => {
       data: {
         post: updatedPost,
       },
-      message: "Blog post updated successfully",
+      message: 'Blog post updated successfully',
     });
   } catch (error) {
     console.error(error);
     return res.status(500).json({
       success: false,
-      message: "Failed to update blog",
+      message: 'Failed to update blog',
       error: error.message,
     });
   }
@@ -186,23 +189,21 @@ export const deleteBlog = async (req, res) => {
     if (!mongoose.Types.ObjectId.isValid(postId)) {
       return res
         .status(400)
-        .json({ success: false, message: "Invalid post ID" });
+        .json({ success: false, message: 'Invalid post ID' });
     }
 
     const post = await postModel.findById(postId);
     if (!post) {
       return res
         .status(404)
-        .json({ success: false, message: "Failed to delete: Post not found" });
+        .json({ success: false, message: 'Failed to delete: Post not found' });
     }
 
     if (post.author.toString() !== userId) {
-      return res
-        .status(403)
-        .json({
-          success: false,
-          message: "You are not authorized to delete this post",
-        });
+      return res.status(403).json({
+        success: false,
+        message: 'You are not authorized to delete this post',
+      });
     }
 
     const deletePost = await postModel.findByIdAndDelete(postId);
@@ -210,19 +211,19 @@ export const deleteBlog = async (req, res) => {
     if (!deletePost) {
       return res
         .status(404)
-        .json({ success: false, message: "Failed to delete: Post not found" });
+        .json({ success: false, message: 'Failed to delete: Post not found' });
     }
 
     return res.status(200).json({
       success: true,
       deletedPostId: postId,
-      message: "Post deleted successfully",
+      message: 'Post deleted successfully',
     });
   } catch (error) {
     console.error(error);
     return res.status(500).json({
       success: false,
-      message: "Failed to delete blog post",
+      message: 'Failed to delete blog post',
       error: error.message,
     });
   }

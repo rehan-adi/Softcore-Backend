@@ -1,4 +1,4 @@
-import jwt from "jsonwebtoken";
+import jwt from 'jsonwebtoken';
 
 export const checkLogin = async (req, res, next) => {
   try {
@@ -7,25 +7,31 @@ export const checkLogin = async (req, res, next) => {
     if (!token) {
       return res.status(401).json({
         success: false,
-        message: "Authentication token is required. Please login.",
+        message: 'Authentication token is required. Please login.',
       });
     }
 
     try {
-      const decoded = jwt.verify(token.replace("Bearer ", ""), process.env.JWT_SECRET);
+      const decoded = jwt.verify(
+        token.replace('Bearer ', ''),
+        process.env.JWT_SECRET
+      );
       req.user = decoded;
       next();
     } catch (error) {
-        console.error('Token verification failed:', error);
+      console.error('Token verification failed:', error);
       return res
         .status(401)
-        .json({ success: false,  message: "Invalid authentication token. Please login again."});
+        .json({
+          success: false,
+          message: 'Invalid authentication token. Please login again.',
+        });
     }
   } catch (error) {
     console.error('Error during authentication check:', error);
     return res.status(500).json({
       success: false,
-      message: "Internal server error while validating the token.",
+      message: 'Internal server error while validating the token.',
       error: error.message,
     });
   }

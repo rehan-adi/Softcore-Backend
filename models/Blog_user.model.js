@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
 const userSchema = new mongoose.Schema(
   {
@@ -14,11 +14,11 @@ const userSchema = new mongoose.Schema(
     },
     email: {
       type: String,
-      required: [true, "email is required"],
+      required: [true, 'email is required'],
       trim: true,
       index: true,
       unique: true,
-      match: [/.+\@.+\..+/, "Please enter a valid email address"],
+      match: [/.+\@.+\..+/, 'Please enter a valid email address'],
     },
     googleId: {
       type: String,
@@ -30,18 +30,18 @@ const userSchema = new mongoose.Schema(
       required: function () {
         return !this.googleId;
       },
-      minlength: [6, "Password must be at least 6 characters long"],
+      minlength: [6, 'Password must be at least 6 characters long'],
     },
     profilePicture: {
       type: String,
       default:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQWC2HlBW_j95D0IfAqW5Ub0yp1aNnx0ixFmg&s",
+        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQWC2HlBW_j95D0IfAqW5Ub0yp1aNnx0ixFmg&s',
     },
     followers: [
-      { type: mongoose.Schema.Types.ObjectId, ref: "Blog_user_model" },
+      { type: mongoose.Schema.Types.ObjectId, ref: 'Blog_user_model' },
     ],
     following: [
-      { type: mongoose.Schema.Types.ObjectId, ref: "Blog_user_model" },
+      { type: mongoose.Schema.Types.ObjectId, ref: 'Blog_user_model' },
     ],
     bio: { type: String, trim: true },
     isPremium: {
@@ -52,6 +52,6 @@ const userSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-const userModel = mongoose.model("Blog_user_model", userSchema);
+const userModel = mongoose.model('Blog_user_model', userSchema);
 
 export default userModel;
