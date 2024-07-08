@@ -3,7 +3,7 @@ import {
   createComment,
   getAllComments,
   updateComment,
-  deleteComments,
+  deleteComments
 } from '../controllers/comment.js';
 import { checkLogin } from '../middleware/auth.middleware.js';
 

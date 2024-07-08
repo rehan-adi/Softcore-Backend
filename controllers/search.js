@@ -8,32 +8,32 @@ export const searchUsers = async (req, res) => {
     if (!username) {
       return res.status(400).json({
         success: false,
-        message: 'Username is required',
+        message: 'Username is required'
       });
     }
 
     const user = await userModel.findOne({
-      username: { $regex: username, $options: 'i' },
+      username: { $regex: username, $options: 'i' }
     });
 
     if (!user) {
       return res.status(404).json({
         success: false,
-        message: 'User not found',
+        message: 'User not found'
       });
     }
 
     return res.status(200).json({
       success: true,
       message: 'User found',
-      user: user,
+      user: user
     });
   } catch (error) {
     console.error(`Error in searchUsers: ${error.message}`);
     return res.status(500).json({
       success: false,
       message: 'Failed to search users',
-      error: error.message,
+      error: error.message
     });
   }
 };
@@ -49,7 +49,7 @@ export const searchPosts = async (req, res) => {
 
     if (author) {
       const users = await userModel.find({
-        username: { $regex: author, $options: 'i' },
+        username: { $regex: author, $options: 'i' }
       });
       if (users.length > 0) {
         const userIds = users.map((user) => user._id);
@@ -57,7 +57,7 @@ export const searchPosts = async (req, res) => {
       } else {
         return res.status(404).json({
           success: false,
-          message: 'Author not found',
+          message: 'Author not found'
         });
       }
     }
@@ -70,21 +70,21 @@ export const searchPosts = async (req, res) => {
     if (posts.length === 0) {
       return res.status(404).json({
         success: false,
-        message: 'No posts found',
+        message: 'No posts found'
       });
     }
 
     return res.status(200).json({
       success: true,
       message: 'Posts found',
-      posts,
+      posts
     });
   } catch (error) {
     console.error(`Error in searchPosts: ${error.message}`);
     return res.status(500).json({
       success: false,
       message: 'Failed to search posts',
-      error: error.message,
+      error: error.message
     });
   }
 };

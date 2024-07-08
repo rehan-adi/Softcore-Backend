@@ -13,14 +13,14 @@ authRouter.get(
   '/google',
   passport.authenticate('google', {
     scope: ['profile', 'email'],
-    session: false,
+    session: false
   })
 );
 authRouter.get(
   '/google/callback',
   passport.authenticate('google', {
     failureRedirect: '/error',
-    session: false,
+    session: false
   }),
   (req, res) => {
     const token = req.user.token;

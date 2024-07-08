@@ -7,7 +7,7 @@ export const checkLogin = async (req, res, next) => {
     if (!token) {
       return res.status(401).json({
         success: false,
-        message: 'Authentication token is required. Please login.',
+        message: 'Authentication token is required. Please login.'
       });
     }
 
@@ -20,19 +20,17 @@ export const checkLogin = async (req, res, next) => {
       next();
     } catch (error) {
       console.error('Token verification failed:', error);
-      return res
-        .status(401)
-        .json({
-          success: false,
-          message: 'Invalid authentication token. Please login again.',
-        });
+      return res.status(401).json({
+        success: false,
+        message: 'Invalid authentication token. Please login again.'
+      });
     }
   } catch (error) {
     console.error('Error during authentication check:', error);
     return res.status(500).json({
       success: false,
       message: 'Internal server error while validating the token.',
-      error: error.message,
+      error: error.message
     });
   }
 };

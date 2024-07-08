@@ -3,7 +3,7 @@ import {
   followUser,
   unfollowUser,
   getFollowingList,
-  getFollowersList,
+  getFollowersList
 } from '../controllers/follow.js';
 import { checkLogin } from '../middleware/auth.middleware.js';
 

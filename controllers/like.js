@@ -23,14 +23,14 @@ export const like = async (req, res) => {
     res.json({
       success: true,
       post,
-      totalLikes: post.likes.length,
+      totalLikes: post.likes.length
     });
   } catch (error) {
     console.error(error);
     return res.status(500).json({
       success: false,
       message: 'Failed to like',
-      error: error.message,
+      error: error.message
     });
   }
 };

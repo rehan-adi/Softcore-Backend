@@ -24,7 +24,7 @@ export const followUser = async (req, res) => {
     if (user.following.includes(followUserId)) {
       return res.status(400).json({
         success: false,
-        message: 'You are already following this user',
+        message: 'You are already following this user'
       });
     }
 
@@ -42,7 +42,7 @@ export const followUser = async (req, res) => {
     return res.status(500).json({
       success: false,
       message: 'Failed to follow user',
-      error: error.message,
+      error: error.message
     });
   }
 };
@@ -89,7 +89,7 @@ export const unfollowUser = async (req, res) => {
     return res.status(500).json({
       success: false,
       message: 'Failed to unfollow user',
-      error: error.message,
+      error: error.message
     });
   }
 };
@@ -106,14 +106,14 @@ export const getFollowingList = async (req, res) => {
     res.status(200).json({
       success: true,
       message: 'User followings',
-      following: user.following,
+      following: user.following
     });
   } catch (error) {
     console.error(error);
     return res.status(500).json({
       success: false,
       message: 'Failde to get user followings',
-      error: error.message,
+      error: error.message
     });
   }
 };
@@ -124,7 +124,7 @@ export const getFollowersList = async (req, res) => {
 
     const user = await userModel.findById(userId).populate({
       path: 'followers',
-      select: 'username email profilePicture bio',
+      select: 'username email profilePicture bio'
     });
 
     if (!user) {
@@ -137,7 +137,7 @@ export const getFollowersList = async (req, res) => {
       username: follower.username,
       email: follower.email,
       profilePicture: follower.profilePicture,
-      bio: follower.bio,
+      bio: follower.bio
     }));
 
     return res.status(200).json({ success: true, followers: followers });
@@ -146,7 +146,7 @@ export const getFollowersList = async (req, res) => {
     return res.status(500).json({
       success: false,
       message: 'Failde to get user followings',
-      error: error.message,
+      error: error.message
     });
   }
 };

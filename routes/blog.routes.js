@@ -5,7 +5,7 @@ import {
   getAllBlogPosts,
   getPostsByCategory,
   updateBlog,
-  deleteBlog,
+  deleteBlog
 } from '../controllers/blog.js';
 
 //middlware to check login

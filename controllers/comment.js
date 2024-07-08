@@ -10,7 +10,7 @@ export const createComment = async (req, res) => {
     if (!authorId || !content) {
       return res.status(400).json({
         success: false,
-        message: 'Author ID and content are required',
+        message: 'Author ID and content are required'
       });
     }
 
@@ -20,14 +20,14 @@ export const createComment = async (req, res) => {
     if (!post || !user) {
       return res.status(404).json({
         success: false,
-        message: 'Post or user not found',
+        message: 'Post or user not found'
       });
     }
 
     const comment = await commentModel.create({
       post: postId,
       author: authorId,
-      content,
+      content
     });
 
     return res.status(201).json({
@@ -36,16 +36,16 @@ export const createComment = async (req, res) => {
         id: comment._id,
         post: comment.post,
         author: comment.author,
-        content: comment.content,
+        content: comment.content
       },
-      message: 'Comment created',
+      message: 'Comment created'
     });
   } catch (error) {
     console.error(error);
     return res.status(500).json({
       success: false,
       message: 'Failed to add comment',
-      error: error.message,
+      error: error.message
     });
   }
 };
@@ -58,15 +58,15 @@ export const getAllComments = async (req, res) => {
     return res.status(200).json({
       success: true,
       comments: {
-        allComment: allComment,
-      },
+        allComment: allComment
+      }
     });
   } catch (error) {
     console.error(error);
     return res.status(500).json({
       success: false,
       message: 'Failed to get comment',
-      error: error.message,
+      error: error.message
     });
   }
 };
@@ -80,7 +80,7 @@ export const updateComment = async (req, res) => {
     if (!content) {
       return res.status(400).json({
         success: false,
-        message: 'Content is required',
+        message: 'Content is required'
       });
     }
 
@@ -93,26 +93,24 @@ export const updateComment = async (req, res) => {
     }
 
     if (comment.author.toString() != userId) {
-      return res
-        .status(403)
-        .json({
-          success: false,
-          message: 'You are not authorized to update this comment',
-        });
+      return res.status(403).json({
+        success: false,
+        message: 'You are not authorized to update this comment'
+      });
     }
 
     const updatedComment = await commentModel.findByIdAndUpdate(
       commentId,
       { content },
       {
-        new: true,
+        new: true
       }
     );
 
     if (!updatedComment) {
       return res.status(404).json({
         success: false,
-        message: 'Comment not found',
+        message: 'Comment not found'
       });
     }
 
@@ -122,16 +120,16 @@ export const updateComment = async (req, res) => {
         id: updatedComment._id,
         post: updatedComment.post,
         author: updatedComment.author,
-        content: updatedComment.content,
+        content: updatedComment.content
       },
-      message: 'Comment updated',
+      message: 'Comment updated'
     });
   } catch (error) {
     console.error(error);
     return res.status(500).json({
       success: false,
       message: 'Failed to update comment',
-      error: error.message,
+      error: error.message
     });
   }
 };
@@ -149,12 +147,10 @@ export const deleteComments = async (req, res) => {
     }
 
     if (comment.author.toString() != userId) {
-      return res
-        .status(403)
-        .json({
-          success: false,
-          message: 'You are not authorized to delete this comment',
-        });
+      return res.status(403).json({
+        success: false,
+        message: 'You are not authorized to delete this comment'
+      });
     }
 
     const deletedComment = await commentModel.findByIdAndDelete(commentId);
@@ -171,16 +167,16 @@ export const deleteComments = async (req, res) => {
         id: deletedComment._id,
         post: deletedComment.post,
         author: deletedComment.author,
-        content: deletedComment.content,
+        content: deletedComment.content
       },
-      message: 'Comment deleted',
+      message: 'Comment deleted'
     });
   } catch (error) {
     console.error(`Failed to delete comment with id ${req.params.id}:`, error);
     return res.status(500).json({
       success: false,
       message: 'Failed to delete comment',
-      error: error.message,
+      error: error.message
     });
   }
 };

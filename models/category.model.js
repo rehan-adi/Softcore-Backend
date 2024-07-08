@@ -7,8 +7,8 @@ const categorySchema = new mongoose.Schema(
       required: true,
       trim: true,
       maxlength: [50, 'Category cannot exceed 50 characters'],
-      unique: true,
-    },
+      unique: true
+    }
   },
   { timestamps: true }
 );

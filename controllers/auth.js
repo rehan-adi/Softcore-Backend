@@ -29,7 +29,7 @@ export const signup = async (req, res) => {
       email,
       password: hashpassword,
       profilePicture,
-      bio,
+      bio
     });
 
     return res.status(201).json({
@@ -40,16 +40,16 @@ export const signup = async (req, res) => {
         fullname: User.fullname,
         email: User.email,
         profilePicture: User.profilePicture,
-        bio: User.bio,
+        bio: User.bio
       },
-      message: 'User created successfully',
+      message: 'User created successfully'
     });
   } catch (error) {
     console.error(error);
     return res.status(500).json({
       success: false,
       message: 'failed to signup',
-      error: error.message,
+      error: error.message
     });
   }
 };
@@ -70,7 +70,7 @@ export const signin = async (req, res) => {
       return res.status(404).json({
         success: false,
         message:
-          'User is not registered with this email. Please register to continue.',
+          'User is not registered with this email. Please register to continue.'
       });
     }
 
@@ -79,7 +79,7 @@ export const signin = async (req, res) => {
     if (!passwordmatch) {
       return res.status(401).json({
         success: false,
-        message: 'Incorrect password. Please try again.',
+        message: 'Incorrect password. Please try again.'
       });
     }
 
@@ -93,7 +93,7 @@ export const signin = async (req, res) => {
       maxAge: 72 * 60 * 60 * 1000,
       httpOnly: true,
       secure: false,
-      sameSite: 'none',
+      sameSite: 'none'
     });
 
     return res.status(200).json({
@@ -104,16 +104,16 @@ export const signin = async (req, res) => {
         username: user.username,
         email: user.email,
         profilePicture: user.profilePicture,
-        bio: user.bio,
+        bio: user.bio
       },
-      message: 'Login successful',
+      message: 'Login successful'
     });
   } catch (error) {
     console.error(error);
     return res.status(500).json({
       success: false,
       message: 'Failed to sign in',
-      error: error.message,
+      error: error.message
     });
   }
 };
@@ -123,19 +123,19 @@ export const logout = (req, res) => {
     // Clear the token from client's cookies
     res.clearCookie('token', {
       httpOnly: true,
-      sameSite: 'strict',
+      sameSite: 'strict'
     });
 
     return res.status(200).json({
       success: true,
-      message: 'Logout successful',
+      message: 'Logout successful'
     });
   } catch (error) {
     console.error('Error during logout:', error);
     return res.status(500).json({
       success: false,
       message: 'Failed to log out',
-      error: error.message,
+      error: error.message
     });
   }
 };

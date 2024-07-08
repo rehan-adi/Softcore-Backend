@@ -9,7 +9,7 @@ export const createOrder = async (req, res) => {
   const options = {
     amount: Number(amount * 100),
     currency: 'INR',
-    receipt: crypto.randomBytes(10).toString('hex'),
+    receipt: crypto.randomBytes(10).toString('hex')
   };
 
   try {
@@ -43,14 +43,14 @@ export const verifyOrder = async (req, res) => {
       const payment = new paymentModel({
         razorpay_order_id,
         razorpay_payment_id,
-        razorpay_signature,
+        razorpay_signature
       });
 
       // Save Payment
       await payment.save();
 
       res.json({
-        message: 'Payement Successfully',
+        message: 'Payement Successfully'
       });
     }
   } catch (error) {

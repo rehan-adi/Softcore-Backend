@@ -13,7 +13,7 @@ export const createBlog = async (req, res) => {
     if (!title || !content || !tags || !category) {
       return res.status(400).json({
         success: false,
-        message: 'All fields are required',
+        message: 'All fields are required'
       });
     }
 
@@ -30,7 +30,7 @@ export const createBlog = async (req, res) => {
       author,
       image,
       tags,
-      category: categoryName._id,
+      category: categoryName._id
     });
 
     return res.status(201).json({
@@ -41,16 +41,16 @@ export const createBlog = async (req, res) => {
         author: newBlog.author,
         image: newBlog.image,
         tags: newBlog.tags,
-        category: categoryName.name,
+        category: categoryName.name
       },
-      message: 'Blog created successfully',
+      message: 'Blog created successfully'
     });
   } catch (error) {
     console.error(error);
     return res.status(500).json({
       success: false,
       message: 'Failed to create blog',
-      error: error.message,
+      error: error.message
     });
   }
 };
@@ -69,29 +69,29 @@ export const getAllBlogPosts = async (req, res) => {
       .populate({
         path: 'author',
         select: 'username profilePicture fullname',
-        model: 'Blog_user_model',
+        model: 'Blog_user_model'
       })
       .populate('category', 'name');
     const totalBlogPosts = await postModel.countDocuments();
     return res.status(200).json({
       success: true,
       data: {
-        blogPost: allBlogPosts,
+        blogPost: allBlogPosts
       },
       pagination: {
         total: totalBlogPosts,
         page,
         limit,
-        totalPages: Math.ceil(totalBlogPosts / limit),
+        totalPages: Math.ceil(totalBlogPosts / limit)
       },
-      message: 'All blogs retrieved successfully',
+      message: 'All blogs retrieved successfully'
     });
   } catch (error) {
     console.error(error);
     return res.status(500).json({
       success: false,
       message: 'Failed to get all blog posts',
-      error: error.message,
+      error: error.message
     });
   }
 };
@@ -106,7 +106,7 @@ export const getPostsByCategory = async (req, res) => {
     if (!categoryExists) {
       return res.status(404).json({
         success: false,
-        message: 'Category not found',
+        message: 'Category not found'
       });
     }
 
@@ -118,16 +118,16 @@ export const getPostsByCategory = async (req, res) => {
     return res.status(200).json({
       success: true,
       data: {
-        posts,
+        posts
       },
-      message: 'Posts retrieved successfully',
+      message: 'Posts retrieved successfully'
     });
   } catch (error) {
     console.error(error);
     return res.status(500).json({
       success: false,
       message: 'Failed to get posts by category',
-      error: error.message,
+      error: error.message
     });
   }
 };
@@ -149,12 +149,12 @@ export const updateBlog = async (req, res) => {
     if (post.author.toString() !== userId) {
       return res.status(403).json({
         success: false,
-        message: 'You are not authorized to update this post',
+        message: 'You are not authorized to update this post'
       });
     }
 
     const updatedPost = await postModel.findByIdAndUpdate(postId, body, {
-      new: true,
+      new: true
     });
 
     if (!updatedPost) {
@@ -166,16 +166,16 @@ export const updateBlog = async (req, res) => {
     return res.status(200).json({
       success: true,
       data: {
-        post: updatedPost,
+        post: updatedPost
       },
-      message: 'Blog post updated successfully',
+      message: 'Blog post updated successfully'
     });
   } catch (error) {
     console.error(error);
     return res.status(500).json({
       success: false,
       message: 'Failed to update blog',
-      error: error.message,
+      error: error.message
     });
   }
 };
@@ -202,7 +202,7 @@ export const deleteBlog = async (req, res) => {
     if (post.author.toString() !== userId) {
       return res.status(403).json({
         success: false,
-        message: 'You are not authorized to delete this post',
+        message: 'You are not authorized to delete this post'
       });
     }
 
@@ -217,14 +217,14 @@ export const deleteBlog = async (req, res) => {
     return res.status(200).json({
       success: true,
       deletedPostId: postId,
-      message: 'Post deleted successfully',
+      message: 'Post deleted successfully'
     });
   } catch (error) {
     console.error(error);
     return res.status(500).json({
       success: false,
       message: 'Failed to delete blog post',
-      error: error.message,
+      error: error.message
     });
   }
 };

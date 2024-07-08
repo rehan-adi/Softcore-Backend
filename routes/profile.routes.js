@@ -3,7 +3,7 @@ import upload from '../utils/multer.js';
 import {
   getProfile,
   updateProfile,
-  getUsersProfile,
+  getUsersProfile
 } from '../controllers/profile.js';
 import { checkLogin } from '../middleware/auth.middleware.js';
 
