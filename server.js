@@ -47,15 +47,15 @@ const limit = ratelimit({
 server.use(cookieParser());
 server.use(express.json());
 server.use(cors(corsOptions));
-server.use(helmet({
-  contentSecurityPolicy: {
-    directives: {
-      defaultSrc: ["'self'"],
-      imgSrc: ["'self'", "https://your-backend-domain.com"],
-    },
-  },
-  frameguard: true,
-}));
+// server.use(helmet({
+//   contentSecurityPolicy: {
+//     directives: {
+//       defaultSrc: ["'self'"],
+//       imgSrc: ["'self'", "http://localhost:3333"],
+//     },
+//   },
+//   frameguard: true,
+// }));
 server.use(morgan('dev'));
 server.use(limit);
 server.use('/uploads', express.static(join(__dirname, 'uploads')));
