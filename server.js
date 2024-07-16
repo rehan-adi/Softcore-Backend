@@ -6,6 +6,7 @@ import xss from 'xss-clean'
 import helmet from 'helmet';
 import morgan from 'morgan';
 import ratelimit from 'express-rate-limit';
+import mongoSanitize from 'express-mongo-sanitize'
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 import cookieParser from 'cookie-parser';
@@ -52,6 +53,7 @@ server.use(cors(corsOptions));
 server.use(helmet());
 server.use(hpp());
 server.use(xss());
+server.use(mongoSanitize());
 server.use(morgan('dev'));
 server.use(limit);
 server.use('/uploads', express.static(join(__dirname, 'uploads')));
