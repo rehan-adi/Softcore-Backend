@@ -2,6 +2,7 @@ import express from 'express';
 import env from 'dotenv';
 import cors from 'cors';
 import hpp from 'hpp';
+import xss from 'xss-clean'
 import helmet from 'helmet';
 import morgan from 'morgan';
 import ratelimit from 'express-rate-limit';
@@ -49,7 +50,8 @@ server.use(express.json());
 server.use(cookieParser());
 server.use(cors(corsOptions));
 server.use(helmet());
-server.use(hpp())
+server.use(hpp());
+server.use(xss());
 server.use(morgan('dev'));
 server.use(limit);
 server.use('/uploads', express.static(join(__dirname, 'uploads')));
