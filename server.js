@@ -58,6 +58,9 @@ server.use(morgan('dev'));
 server.use(limit);
 server.use('/uploads', express.static(join(__dirname, 'uploads')));
 
+// Disabling 'X-Powered-By' header for security reasons
+server.disable('x-powered-by');
+
 // Initialize passport
 server.use(passport.initialize());
 
