@@ -2,11 +2,11 @@ import express from 'express';
 import env from 'dotenv';
 import cors from 'cors';
 import hpp from 'hpp';
-import xss from 'xss-clean'
+import xss from 'xss-clean';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import ratelimit from 'express-rate-limit';
-import mongoSanitize from 'express-mongo-sanitize'
+import mongoSanitize from 'express-mongo-sanitize';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 import cookieParser from 'cookie-parser';

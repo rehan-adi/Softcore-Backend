@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "start": "nodemon server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "node server.js",
+    "format": "npx prettier --write \"**/*.js\""
   },
   "keywords": [],
   "author": "Rehan",
