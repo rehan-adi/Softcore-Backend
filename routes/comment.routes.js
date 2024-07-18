@@ -1,9 +1,9 @@
 import express from 'express';
 import {
-  createComment,
-  getAllComments,
-  updateComment,
-  deleteComments
+    createComment,
+    getAllComments,
+    updateComment,
+    deleteComments
 } from '../controllers/comment.js';
 import { checkLogin } from '../middleware/auth.middleware.js';
 

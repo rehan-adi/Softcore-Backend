@@ -1,11 +1,11 @@
 import express from 'express';
 import upload from '../utils/multer.js';
 import {
-  createBlog,
-  getAllBlogPosts,
-  getPostsByCategory,
-  updateBlog,
-  deleteBlog
+    createBlog,
+    getAllBlogPosts,
+    getPostsByCategory,
+    updateBlog,
+    deleteBlog
 } from '../controllers/blog.js';
 
 //middlware to check login

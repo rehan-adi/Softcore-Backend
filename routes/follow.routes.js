@@ -1,9 +1,9 @@
 import express from 'express';
 import {
-  followUser,
-  unfollowUser,
-  getFollowingList,
-  getFollowersList
+    followUser,
+    unfollowUser,
+    getFollowingList,
+    getFollowersList
 } from '../controllers/follow.js';
 import { checkLogin } from '../middleware/auth.middleware.js';
 
