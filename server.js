@@ -31,7 +31,7 @@ const __dirname = dirname(__filename);
 
 const server = express();
 
-// database connection
+// Database connection
 dbConnect();
 
 // Rate limiting configuration
@@ -65,7 +65,7 @@ server.disable('x-powered-by');
 // Initialize passport
 server.use(passport.initialize());
 
-// routes
+// Routes
 server.use('/api/auth', authRouter);
 server.use('/api/blogs', blogRouter);
 server.use('/api/comments', commentRouter);
@@ -74,6 +74,18 @@ server.use('/api/profile', profileRouter);
 server.use('/api/search', searchRouter);
 server.use('/api/user', followRouter);
 server.use('/api/payment', paymentRoute);
+
+// Health Check Route
+app.get('/', (req, res) => {
+    res.status(200).json({ success: true });
+});
+
+// Handle Undefined Routes
+app.all('*', (req, res, next) => {
+    const error = new Error(`Can't find ${req.originalUrl} on this server!`);
+    error.status = 404;
+    next(error);
+});
 
 // Error handling middleware
 server.use(errorMiddleware);
