@@ -12,6 +12,7 @@ import { dirname, join } from 'path';
 import cookieParser from 'cookie-parser';
 import dbConnect from './config/dbConnect.js';
 import passport from './config/passport.js';
+import errorMiddleware from './middleware/errorMiddleware.js'
 
 import authRouter from './routes/auth.routes.js';
 import blogRouter from './routes/blog.routes.js';
@@ -73,6 +74,9 @@ server.use('/api/profile', profileRouter);
 server.use('/api/search', searchRouter);
 server.use('/api/user', followRouter);
 server.use('/api/payment', paymentRoute);
+
+// Error handling middleware
+server.use(errorMiddleware);
 
 server.listen(process.env.PORT || 3333, () => {
     console.log(`Server listening on ${process.env.PORT}`);
