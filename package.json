@@ -5,9 +5,9 @@
   "main": "server.js",
   "type": "module",
   "scripts": {
-    "start": "nodemon server.js",
+    "start": "nodemon dist/server.js",
     "build": "tsc",
-    "dev": "node server.js",
+    "dev": "ts-node src/server.ts",
     "format": "npx prettier --write \"**/*.js\""
   },
   "keywords": [],
