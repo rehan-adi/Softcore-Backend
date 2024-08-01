@@ -1,5 +1,5 @@
 import express from 'express';
-import upload from '../utils/multer.js';
+import upload from '../middleware/multer.middleware.js';
 import {
     getProfile,
     updateProfile,

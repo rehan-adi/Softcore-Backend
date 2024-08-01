@@ -1,4 +1,4 @@
-import razorpay from '../config/razorpay.js';
+import razorpay from '../utils/razorpay.js';
 import userModel from '../models/Blog_user.model.js';
 import crypto from 'crypto';
 import paymentModel from '../models/payment.model.js';

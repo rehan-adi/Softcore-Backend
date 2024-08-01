@@ -11,7 +11,7 @@ import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 import cookieParser from 'cookie-parser';
 import dbConnect from './db/dbConnect.js';
-import passport from './config/passport.js';
+import passport from './utils/passport.js';
 import errorMiddleware from './middleware/errorMiddleware.js'
 
 import authRouter from './routes/auth.routes.js';
