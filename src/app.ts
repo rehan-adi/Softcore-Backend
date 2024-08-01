@@ -66,14 +66,14 @@ app.disable('x-powered-by');
 app.use(passport.initialize());
 
 // Routes
-app.use('/api/auth', authRouter);
-app.use('/api/blogs', blogRouter);
-app.use('/api/comments', commentRouter);
-app.use('/api/likes', likeRouter);
-app.use('/api/profile', profileRouter);
-app.use('/api/search', searchRouter);
-app.use('/api/user', followRouter);
-app.use('/api/payment', paymentRoute);
+app.use('/api/v1/auth', authRouter);
+app.use('/api/v1/blogs', blogRouter);
+app.use('/api/v1/comments', commentRouter);
+app.use('/api/v1/likes', likeRouter);
+app.use('/api/v1/profile', profileRouter);
+app.use('/api/v1/search', searchRouter);
+app.use('/api/v1/user', followRouter);
+app.use('/api/v1/payment', paymentRoute);
 
 // Health Check Route
 app.get('/', (req, res) => {
