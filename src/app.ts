@@ -10,7 +10,7 @@ import mongoSanitize from 'express-mongo-sanitize';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 import cookieParser from 'cookie-parser';
-import dbConnect from './config/dbConnect.js';
+import dbConnect from './db/dbConnect.js';
 import passport from './config/passport.js';
 import errorMiddleware from './middleware/errorMiddleware.js'
 
