@@ -1,6 +1,8 @@
+import { NextFunction, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
+import config from '../config/config.js';
 
-export const checkLogin = async (req, res, next) => {
+export const checkLogin = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const token = req.cookies.token || req.headers.authorization;
 
@@ -14,7 +16,7 @@ export const checkLogin = async (req, res, next) => {
         try {
             const decoded = jwt.verify(
                 token.replace('Bearer ', ''),
-                process.env.JWT_SECRET
+                config.JWT_SECRET
             );
             req.user = decoded;
             next();

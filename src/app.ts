@@ -22,6 +22,7 @@ import profileRouter from './routes/profile.routes.js';
 import searchRouter from './routes/search.routes.js';
 import followRouter from './routes/follow.routes.js';
 import paymentRoute from './routes/payment.routes.js';
+import config from './config/config.js';
 
 // env config
 env.config();
@@ -36,7 +37,7 @@ dbConnect();
 
 // Rate limiting configuration
 const corsOptions = {
-    origin: 'http://localhost:5173',
+    origin: config.CORS_ORIGIN,
     credentials: true
 };
 

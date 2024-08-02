@@ -1,11 +1,12 @@
 import app from './app.js';
+import config from './config/config.js';
 import dbConnect from './db/dbConnect.js';
 
 // database connection
 dbConnect()
     .then(() => {
-        app.listen(process.env.PORT, () => {
-            console.log(`Server is running at port ${process.env.PORT}...`);
+        app.listen(config.PORT, () => {
+            console.log(`Server is running at port ${config.PORT}...`);
         });
     })
     .catch((err) => {
