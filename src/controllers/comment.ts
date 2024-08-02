@@ -1,8 +1,9 @@
+import { Request, Response } from 'express';
 import commentModel from '../models/comment.model.js';
 import postModel from '../models/post.model.js';
 import userModel from '../models/Blog_user.model.js';
 
-export const createComment = async (req, res) => {
+export const createComment = async (req: Request, res: Response) => {
     try {
         const { postId } = req.params;
         const { authorId, content } = req.body;
@@ -50,7 +51,7 @@ export const createComment = async (req, res) => {
     }
 };
 
-export const getAllComments = async (req, res) => {
+export const getAllComments = async (req: Request, res: Response) => {
     try {
         const allComment = await commentModel
             .find()
@@ -71,7 +72,7 @@ export const getAllComments = async (req, res) => {
     }
 };
 
-export const updateComment = async (req, res) => {
+export const updateComment = async (req: Request, res: Response) => {
     try {
         const commentId = req.params.commentId;
         const userId = req.user.id;
@@ -134,7 +135,7 @@ export const updateComment = async (req, res) => {
     }
 };
 
-export const deleteComments = async (req, res) => {
+export const deleteComments = async (req: Request, res: Response) => {
     try {
         const commentId = req.params.commentId;
         const userId = req.user.id;

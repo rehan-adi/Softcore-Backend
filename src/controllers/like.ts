@@ -1,6 +1,7 @@
+import { Request, Response } from 'express';
 import postModel from '../models/post.model.js';
 
-export const like = async (req, res) => {
+export const like = async (req: Request, res: Response) => {
     try {
         const postId = req.params.postId;
         const userId = req.user.id;

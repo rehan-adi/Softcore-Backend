@@ -1,7 +1,8 @@
+import { Request, Response } from 'express';
 import userModel from '../models/Blog_user.model.js';
 import postModel from '../models/post.model.js';
 
-export const searchUsers = async (req, res) => {
+export const searchUsers = async (req: Request, res: Response) => {
     try {
         const { username } = req.query;
 
@@ -38,7 +39,7 @@ export const searchUsers = async (req, res) => {
     }
 };
 
-export const searchPosts = async (req, res) => {
+export const searchPosts = async (req: Request, res: Response) => {
     try {
         const { title, author } = req.query;
         let query = {};

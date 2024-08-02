@@ -2,8 +2,9 @@ import razorpay from '../utils/razorpay.js';
 import userModel from '../models/Blog_user.model.js';
 import crypto from 'crypto';
 import paymentModel from '../models/payment.model.js';
+import { Request, Response } from 'express';
 
-export const createOrder = async (req, res) => {
+export const createOrder = async (req: Request, res: Response) => {
     const { amount } = req.body;
 
     const options = {
@@ -25,7 +26,7 @@ export const createOrder = async (req, res) => {
     }
 };
 
-export const verifyOrder = async (req, res) => {
+export const verifyOrder = async (req: Request, res: Response) => {
     const { razorpay_order_id, razorpay_payment_id, razorpay_signature } =
         req.body;
 

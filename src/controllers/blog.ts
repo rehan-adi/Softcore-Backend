@@ -1,9 +1,10 @@
+import { Request, Response } from 'express';
 import postModel from '../models/post.model.js';
 import categoryModel from '../models/category.model.js';
 import mongoose from 'mongoose';
 
 // create a new blog
-export const createBlog = async (req, res) => {
+export const createBlog = async (req: Request, res: Response) => {
     try {
         const { title, content, tags, category } = req.body;
 
@@ -56,7 +57,7 @@ export const createBlog = async (req, res) => {
 };
 
 // get all blog
-export const getAllBlogPosts = async (req, res) => {
+export const getAllBlogPosts = async (req: Request, res: Response) => {
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
     const skip = (page - 1) * limit;
@@ -97,7 +98,7 @@ export const getAllBlogPosts = async (req, res) => {
 };
 
 // get posts by category
-export const getPostsByCategory = async (req, res) => {
+export const getPostsByCategory = async (req: Request, res: Response) => {
     const categoryId = req.params.categoryId;
 
     try {
@@ -133,7 +134,7 @@ export const getPostsByCategory = async (req, res) => {
 };
 
 // update a blog post
-export const updateBlog = async (req, res) => {
+export const updateBlog = async (req: Request, res: Response) => {
     try {
         const postId = req.params.id;
         const userId = req.user.id;
@@ -187,7 +188,7 @@ export const updateBlog = async (req, res) => {
 };
 
 // delete a blog post
-export const deleteBlog = async (req, res) => {
+export const deleteBlog = async (req: Request, res: Response) => {
     try {
         const postId = req.params.id;
         const userId = req.user.id;

@@ -1,7 +1,8 @@
+import { Request, Response } from 'express';
 import userModel from '../models/Blog_user.model.js';
 import mongoose from 'mongoose';
 
-export const followUser = async (req, res) => {
+export const followUser = async (req: Request, res: Response) => {
     try {
         const userId = req.user.id;
         const followUserId = req.params.id;
@@ -48,7 +49,7 @@ export const followUser = async (req, res) => {
     }
 };
 
-export const unfollowUser = async (req, res) => {
+export const unfollowUser = async (req: Request, res: Response) => {
     try {
         const userId = req.user.id;
         const unfollowUserId = req.params.id;
@@ -98,7 +99,7 @@ export const unfollowUser = async (req, res) => {
     }
 };
 
-export const getFollowingList = async (req, res) => {
+export const getFollowingList = async (req: Request, res: Response) => {
     try {
         const userId = req.user.id;
         const user = await userModel
@@ -122,7 +123,7 @@ export const getFollowingList = async (req, res) => {
     }
 };
 
-export const getFollowersList = async (req, res) => {
+export const getFollowersList = async (req: Request, res: Response) => {
     try {
         const userId = req.user.id;
 

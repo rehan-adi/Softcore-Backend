@@ -1,8 +1,9 @@
+import { Request, Response } from 'express';
 import userModel from '../models/Blog_user.model.js';
 import postModel from '../models/post.model.js';
 
 // create profile
-export const getProfile = async (req, res) => {
+export const getProfile = async (req: Request, res: Response) => {
     try {
         const userId = req.user.id;
 
@@ -39,7 +40,7 @@ export const getProfile = async (req, res) => {
 };
 
 // update profile
-export const updateProfile = async (req, res) => {
+export const updateProfile = async (req: Request, res: Response) => {
     try {
         const { username, bio } = req.body;
         // const image = req.file ? `/uploads/${req.file.filename}` : null;
@@ -82,7 +83,7 @@ export const updateProfile = async (req, res) => {
 };
 
 // get other users profile
-export const getUsersProfile = async (req, res) => {
+export const getUsersProfile = async (req: Request, res: Response) => {
     try {
         const userId = req.params.id;
         const profile = await userModel.findById(userId);

@@ -1,8 +1,9 @@
+import { Request, Response } from 'express';
 import userModel from '../models/Blog_user.model.js';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
-export const signup = async (req, res) => {
+export const signup = async (req: Request, res: Response) => {
     try {
         const { username, fullname, email, password, profilePicture, bio } =
             req.body;
@@ -54,7 +55,7 @@ export const signup = async (req, res) => {
     }
 };
 
-export const signin = async (req, res) => {
+export const signin = async (req: Request, res: Response) => {
     try {
         const { email, password } = req.body;
 
@@ -118,7 +119,7 @@ export const signin = async (req, res) => {
     }
 };
 
-export const logout = (req, res) => {
+export const logout = (req: Request, res: Response) => {
     try {
         // Clear the token from client's cookies
         res.clearCookie('token', {
