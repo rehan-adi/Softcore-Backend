@@ -12,6 +12,7 @@ interface Config {
     GOOGLE_CLIENT_SECRET: string;
     CLOUDINARY_CLOUD_NAME: string;
     CLOUDINARY_API_KEY: string;
+    RAZORPAY_SECRET: string;
 }
 
 const config: Config = {
@@ -24,6 +25,7 @@ const config: Config = {
     GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET as string,
     CLOUDINARY_CLOUD_NAME: process.env.CLOUDINARY_CLOUD_NAME as string,
     CLOUDINARY_API_KEY: process.env.CLOUDINARY_API_KEY as string,
+    RAZORPAY_SECRET: process.env.RAZORPAY_SECRET as string,
 }
 
 export default config

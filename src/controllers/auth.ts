@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import userModel from '../models/Blog_user.model.js';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import config from '../config/config.js';
 
 export const signup = async (req: Request, res: Response) => {
     try {
@@ -86,7 +87,7 @@ export const signin = async (req: Request, res: Response) => {
 
         const token = jwt.sign(
             { id: user._id, email: user.email },
-            process.env.JWT_SECRET,
+            config.JWT_SECRET,
             { expiresIn: '72h' }
         );
 

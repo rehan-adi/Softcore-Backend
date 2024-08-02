@@ -3,6 +3,7 @@ import userModel from '../models/Blog_user.model.js';
 import crypto from 'crypto';
 import paymentModel from '../models/payment.model.js';
 import { Request, Response } from 'express';
+import config from '../config/config.js';
 
 export const createOrder = async (req: Request, res: Response) => {
     const { amount } = req.body;
@@ -34,7 +35,7 @@ export const verifyOrder = async (req: Request, res: Response) => {
         const sign = razorpay_order_id + '|' + razorpay_payment_id;
 
         const expectedSign = crypto
-            .createHmac('sha256', process.env.RAZORPAY_SECRET)
+            .createHmac('sha256', config.RAZORPAY_SECRET)
             .update(sign.toString())
             .digest('hex');
 
