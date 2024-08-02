@@ -1,11 +1,11 @@
 import express from 'express';
-import upload from '../middleware/multer.middleware.js';
+import upload from '../middlewares/multer.middleware.js';
 import {
     getProfile,
     updateProfile,
     getUsersProfile
 } from '../controllers/profile.js';
-import { checkLogin } from '../middleware/auth.middleware.js';
+import { checkLogin } from '../middlewares/auth.middleware.js';
 
 const profileRouter = express.Router();
 

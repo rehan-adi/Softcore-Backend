@@ -1,5 +1,5 @@
 import express from 'express';
-import upload from '../middleware/multer.middleware.js';
+import upload from '../middlewares/multer.middleware.js';
 import {
     createBlog,
     getAllBlogPosts,
@@ -9,7 +9,7 @@ import {
 } from '../controllers/blog.js';
 
 //middlware to check login
-import { checkLogin } from '../middleware/auth.middleware.js';
+import { checkLogin } from '../middlewares/auth.middleware.js';
 
 const blogRouter = express.Router();
 

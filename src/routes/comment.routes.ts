@@ -5,7 +5,7 @@ import {
     updateComment,
     deleteComments
 } from '../controllers/comment.js';
-import { checkLogin } from '../middleware/auth.middleware.js';
+import { checkLogin } from '../middlewares/auth.middleware.js';
 
 const commentRouter = express.Router();
 

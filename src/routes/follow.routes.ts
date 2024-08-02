@@ -5,7 +5,7 @@ import {
     getFollowingList,
     getFollowersList
 } from '../controllers/follow.js';
-import { checkLogin } from '../middleware/auth.middleware.js';
+import { checkLogin } from '../middlewares/auth.middleware.js';
 
 const followRouter = express.Router();
 

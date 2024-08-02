@@ -1,6 +1,6 @@
 import express from 'express';
 import { like } from '../controllers/like.js';
-import { checkLogin } from '../middleware/auth.middleware.js';
+import { checkLogin } from '../middlewares/auth.middleware.js';
 
 const likeRouter = express.Router();
 
