@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
+import { User } from '../interfaces/interfaces.js';
 
-const userSchema = new mongoose.Schema(
+const userSchema = new mongoose.Schema<User>(
     {
         username: {
             type: String,
@@ -37,12 +38,8 @@ const userSchema = new mongoose.Schema(
             default:
                 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQWC2HlBW_j95D0IfAqW5Ub0yp1aNnx0ixFmg&s'
         },
-        followers: [
-            { type: mongoose.Schema.Types.ObjectId, ref: 'Blog_user_model' }
-        ],
-        following: [
-            { type: mongoose.Schema.Types.ObjectId, ref: 'Blog_user_model' }
-        ],
+        followers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+        following: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
         bio: { type: String, trim: true },
         isPremium: {
             type: Boolean,
@@ -52,6 +49,6 @@ const userSchema = new mongoose.Schema(
     { timestamps: true }
 );
 
-const userModel = mongoose.model('Blog_user_model', userSchema);
+const userModel = mongoose.model<User>('User', userSchema);
 
 export default userModel;

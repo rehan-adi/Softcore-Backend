@@ -1,4 +1,4 @@
-import env from 'dotenv'
+import env from 'dotenv';
 
 env.config();
 
@@ -25,7 +25,7 @@ const config: Config = {
     GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET as string,
     CLOUDINARY_CLOUD_NAME: process.env.CLOUDINARY_CLOUD_NAME as string,
     CLOUDINARY_API_KEY: process.env.CLOUDINARY_API_KEY as string,
-    RAZORPAY_SECRET: process.env.RAZORPAY_SECRET as string,
-}
+    RAZORPAY_SECRET: process.env.RAZORPAY_SECRET as string
+};
 
-export default config
+export default config;

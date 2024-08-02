@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import userModel from '../models/Blog_user.model.js';
+import userModel from '../models/user.model.js';
 import mongoose from 'mongoose';
 
 export const followUser = async (req: Request, res: Response) => {
@@ -70,12 +70,10 @@ export const unfollowUser = async (req: Request, res: Response) => {
         }
 
         if (userId === unfollowUserId) {
-            return res
-                .status(400)
-                .json({
-                    success: false,
-                    message: 'You cannot unfollow yourself'
-                });
+            return res.status(400).json({
+                success: false,
+                message: 'You cannot unfollow yourself'
+            });
         }
 
         user.following = user.following.filter(

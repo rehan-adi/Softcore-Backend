@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import userModel from '../models/Blog_user.model.js';
+import userModel from '../models/user.model.js';
 import postModel from '../models/post.model.js';
 
 // create profile

@@ -142,12 +142,10 @@ export const updateBlog = async (req: Request, res: Response) => {
 
         const post = await postModel.findById(postId);
         if (!post) {
-            return res
-                .status(404)
-                .json({
-                    success: false,
-                    message: 'Failed to update: Post not found'
-                });
+            return res.status(404).json({
+                success: false,
+                message: 'Failed to update: Post not found'
+            });
         }
 
         if (post.author.toString() !== userId) {
@@ -162,12 +160,10 @@ export const updateBlog = async (req: Request, res: Response) => {
         });
 
         if (!updatedPost) {
-            return res
-                .status(404)
-                .json({
-                    success: false,
-                    message: 'Failed to update: Post not found'
-                });
+            return res.status(404).json({
+                success: false,
+                message: 'Failed to update: Post not found'
+            });
         }
 
         return res.status(200).json({
@@ -201,12 +197,10 @@ export const deleteBlog = async (req: Request, res: Response) => {
 
         const post = await postModel.findById(postId);
         if (!post) {
-            return res
-                .status(404)
-                .json({
-                    success: false,
-                    message: 'Failed to delete: Post not found'
-                });
+            return res.status(404).json({
+                success: false,
+                message: 'Failed to delete: Post not found'
+            });
         }
 
         if (post.author.toString() !== userId) {
@@ -219,12 +213,10 @@ export const deleteBlog = async (req: Request, res: Response) => {
         const deletePost = await postModel.findByIdAndDelete(postId);
 
         if (!deletePost) {
-            return res
-                .status(404)
-                .json({
-                    success: false,
-                    message: 'Failed to delete: Post not found'
-                });
+            return res.status(404).json({
+                success: false,
+                message: 'Failed to delete: Post not found'
+            });
         }
 
         return res.status(200).json({

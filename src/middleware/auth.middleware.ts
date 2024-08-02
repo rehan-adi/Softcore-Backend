@@ -2,7 +2,11 @@ import { NextFunction, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import config from '../config/config.js';
 
-export const checkLogin = async (req: Request, res: Response, next: NextFunction) => {
+export const checkLogin = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
     try {
         const token = req.cookies.token || req.headers.authorization;
 

@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import commentModel from '../models/comment.model.js';
 import postModel from '../models/post.model.js';
-import userModel from '../models/Blog_user.model.js';
+import userModel from '../models/user.model.js';
 
 export const createComment = async (req: Request, res: Response) => {
     try {

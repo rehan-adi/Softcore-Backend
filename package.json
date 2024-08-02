@@ -8,7 +8,7 @@
     "start": "nodemon dist/server.js",
     "build": "tsc",
     "dev": "ts-node src/server.ts",
-    "format": "npx prettier --write \"**/*.js\""
+    "format": "npx prettier --write \"**/*.ts\""
   },
   "keywords": [],
   "author": "Rehan",

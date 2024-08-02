@@ -1,5 +1,5 @@
 import razorpay from '../utils/razorpay.js';
-import userModel from '../models/Blog_user.model.js';
+import userModel from '../models/user.model.js';
 import crypto from 'crypto';
 import paymentModel from '../models/payment.model.js';
 import { Request, Response } from 'express';
