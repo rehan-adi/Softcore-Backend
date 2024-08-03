@@ -1,7 +1,9 @@
 import { Request, Response } from 'express';
+import mongoose from 'mongoose';
 import postModel from '../models/post.model.js';
 import categoryModel from '../models/category.model.js';
-import mongoose from 'mongoose';
+import { createBlogValidation } from '../validations/blog.validation.js';
+import { ZodError } from 'zod';
 
 interface CustomRequest extends Request {
     user?: { id: string };
@@ -10,25 +12,22 @@ interface CustomRequest extends Request {
 // create a new blog
 export const createBlog = async (req: CustomRequest, res: Response) => {
     try {
-        const { title, content, tags, category } = req.body;
+        // Parse and validate the request body using Zod
+        const parsedData = createBlogValidation.parse(req.body);
+        const { title, content, tags, category } = parsedData;
 
+        // Handle file upload if present
         const image = req.file ? req.file.path : null;
         const author = req.user?.id;
 
-        if (!title || !content || !tags || !category) {
-            return res.status(400).json({
-                success: false,
-                message: 'All fields are required'
-            });
-        }
-
+        // Check if the category already exists, if not, create it
         let categoryName = await categoryModel.findOne({ name: category });
-
         if (!categoryName) {
             categoryName = new categoryModel({ name: category });
             await categoryName.save();
         }
 
+        // Create a new blog post
         const newBlog = await postModel.create({
             title,
             content,
@@ -38,6 +37,7 @@ export const createBlog = async (req: CustomRequest, res: Response) => {
             category: categoryName._id
         });
 
+        // Respond with the created blog details
         return res.status(201).json({
             success: true,
             data: {
@@ -51,6 +51,14 @@ export const createBlog = async (req: CustomRequest, res: Response) => {
             message: 'Blog created successfully'
         });
     } catch (error) {
+        // Handle validation errors from Zod
+        if (error instanceof ZodError) {
+            return res.status(400).json({
+                success: false,
+                message: error.errors.map((e) => e.message)
+            });
+        }
+        // Log the error and return a server error response
         console.error(error);
         return res.status(500).json({
             success: false,

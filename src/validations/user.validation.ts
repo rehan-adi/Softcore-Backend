@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-// Signup Validation
+// Define validation schema for Sign up
 export const signupValidation = z.object({
     username: z.string().min(1, { message: 'username is required' }),
     fullname: z.string().min(1, { message: 'fullname is required' }),
@@ -12,7 +12,7 @@ export const signupValidation = z.object({
     bio: z.string().optional()
 });
 
-// Signin Validation
+// Define validation schema for Sign in
 export const signinValidation = z.object({
     email: z.string().email({ message: 'Invalid email address format' }),
     password: z
