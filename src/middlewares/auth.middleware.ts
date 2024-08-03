@@ -36,7 +36,7 @@ export const checkLogin = async (
         return res.status(500).json({
             success: false,
             message: 'Internal server error while validating the token.',
-            error: error.message
+            error: error instanceof Error ? error.message : 'Unknown error'
         });
     }
 };

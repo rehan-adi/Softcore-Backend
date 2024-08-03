@@ -3,13 +3,17 @@ import postModel from '../models/post.model.js';
 import categoryModel from '../models/category.model.js';
 import mongoose from 'mongoose';
 
+interface CustomRequest extends Request {
+    user?: { id: string };
+}
+
 // create a new blog
-export const createBlog = async (req: Request, res: Response) => {
+export const createBlog = async (req: CustomRequest, res: Response) => {
     try {
         const { title, content, tags, category } = req.body;
 
         const image = req.file ? req.file.path : null;
-        const author = req.user.id;
+        const author = req.user?.id;
 
         if (!title || !content || !tags || !category) {
             return res.status(400).json({
@@ -134,10 +138,10 @@ export const getPostsByCategory = async (req: Request, res: Response) => {
 };
 
 // update a blog post
-export const updateBlog = async (req: Request, res: Response) => {
+export const updateBlog = async (req: CustomRequest, res: Response) => {
     try {
         const postId = req.params.id;
-        const userId = req.user.id;
+        const userId = req.user?.id;
         const { body } = req;
 
         const post = await postModel.findById(postId);
@@ -184,10 +188,10 @@ export const updateBlog = async (req: Request, res: Response) => {
 };
 
 // delete a blog post
-export const deleteBlog = async (req: Request, res: Response) => {
+export const deleteBlog = async (req: CustomRequest, res: Response) => {
     try {
         const postId = req.params.id;
-        const userId = req.user.id;
+        const userId = req.user?.id;
 
         if (!mongoose.Types.ObjectId.isValid(postId)) {
             return res
