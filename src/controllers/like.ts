@@ -31,7 +31,7 @@ export const like = async (req: Request, res: Response) => {
         return res.status(500).json({
             success: false,
             message: 'Failed to like',
-            error: error.message
+            error: error instanceof Error ? error.message : 'Unknown error'
         });
     }
 };

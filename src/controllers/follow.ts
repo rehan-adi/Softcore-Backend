@@ -44,7 +44,7 @@ export const followUser = async (req: Request, res: Response) => {
         return res.status(500).json({
             success: false,
             message: 'Failed to follow user',
-            error: error.message
+            error: error instanceof Error ? error.message : 'Unknown error'
         });
     }
 };
@@ -92,7 +92,7 @@ export const unfollowUser = async (req: Request, res: Response) => {
         return res.status(500).json({
             success: false,
             message: 'Failed to unfollow user',
-            error: error.message
+            error: error instanceof Error ? error.message : 'Unknown error'
         });
     }
 };
@@ -116,7 +116,7 @@ export const getFollowingList = async (req: Request, res: Response) => {
         return res.status(500).json({
             success: false,
             message: 'Failde to get user followings',
-            error: error.message
+            error: error instanceof Error ? error.message : 'Unknown error'
         });
     }
 };
@@ -149,7 +149,7 @@ export const getFollowersList = async (req: Request, res: Response) => {
         return res.status(500).json({
             success: false,
             message: 'Failde to get user followings',
-            error: error.message
+            error: error instanceof Error ? error.message : 'Unknown error'
         });
     }
 };

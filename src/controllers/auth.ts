@@ -51,7 +51,7 @@ export const signup = async (req: Request, res: Response) => {
         return res.status(500).json({
             success: false,
             message: 'failed to signup',
-            error: error.message
+            error: error instanceof Error ? error.message : 'Unknown error'
         });
     }
 };
@@ -115,7 +115,7 @@ export const signin = async (req: Request, res: Response) => {
         return res.status(500).json({
             success: false,
             message: 'Failed to sign in',
-            error: error.message
+            error: error instanceof Error ? error.message : 'Unknown error'
         });
     }
 };
@@ -137,7 +137,7 @@ export const logout = (req: Request, res: Response) => {
         return res.status(500).json({
             success: false,
             message: 'Failed to log out',
-            error: error.message
+            error: error instanceof Error ? error.message : 'Unknown error'
         });
     }
 };

@@ -46,7 +46,7 @@ export const createComment = async (req: Request, res: Response) => {
         return res.status(500).json({
             success: false,
             message: 'Failed to add comment',
-            error: error.message
+            error: error instanceof Error ? error.message : 'Unknown error'
         });
     }
 };
@@ -67,7 +67,7 @@ export const getAllComments = async (req: Request, res: Response) => {
         return res.status(500).json({
             success: false,
             message: 'Failed to get comment',
-            error: error.message
+            error: error instanceof Error ? error.message : 'Unknown error'
         });
     }
 };
@@ -130,7 +130,7 @@ export const updateComment = async (req: Request, res: Response) => {
         return res.status(500).json({
             success: false,
             message: 'Failed to update comment',
-            error: error.message
+            error: error instanceof Error ? error.message : 'Unknown error'
         });
     }
 };
@@ -180,7 +180,7 @@ export const deleteComments = async (req: Request, res: Response) => {
         return res.status(500).json({
             success: false,
             message: 'Failed to delete comment',
-            error: error.message
+            error: error instanceof Error ? error.message : 'Unknown error'
         });
     }
 };

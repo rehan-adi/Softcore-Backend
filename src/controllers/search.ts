@@ -34,7 +34,7 @@ export const searchUsers = async (req: Request, res: Response) => {
         return res.status(500).json({
             success: false,
             message: 'Failed to search users',
-            error: error.message
+            error: error instanceof Error ? error.message : 'Unknown error'
         });
     }
 };
@@ -85,7 +85,7 @@ export const searchPosts = async (req: Request, res: Response) => {
         return res.status(500).json({
             success: false,
             message: 'Failed to search posts',
-            error: error.message
+            error: error instanceof Error ? error.message : 'Unknown error'
         });
     }
 };

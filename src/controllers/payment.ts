@@ -22,7 +22,7 @@ export const createOrder = async (req: Request, res: Response) => {
         console.error(error);
         res.status(500).json({
             message: 'Internal Server Error!',
-            error: error.message
+            error: error instanceof Error ? error.message : 'Unknown error'
         });
     }
 };

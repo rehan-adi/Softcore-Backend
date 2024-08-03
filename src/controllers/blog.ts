@@ -51,7 +51,7 @@ export const createBlog = async (req: Request, res: Response) => {
         return res.status(500).json({
             success: false,
             message: 'Failed to create blog',
-            error: error.message
+            error: error instanceof Error ? error.message : 'Unknown error'
         });
     }
 };
@@ -92,7 +92,7 @@ export const getAllBlogPosts = async (req: Request, res: Response) => {
         return res.status(500).json({
             success: false,
             message: 'Failed to get all blog posts',
-            error: error.message
+            error: error instanceof Error ? error.message : 'Unknown error'
         });
     }
 };
@@ -128,7 +128,7 @@ export const getPostsByCategory = async (req: Request, res: Response) => {
         return res.status(500).json({
             success: false,
             message: 'Failed to get posts by category',
-            error: error.message
+            error: error instanceof Error ? error.message : 'Unknown error'
         });
     }
 };
@@ -178,7 +178,7 @@ export const updateBlog = async (req: Request, res: Response) => {
         return res.status(500).json({
             success: false,
             message: 'Failed to update blog',
-            error: error.message
+            error: error instanceof Error ? error.message : 'Unknown error'
         });
     }
 };
@@ -229,7 +229,7 @@ export const deleteBlog = async (req: Request, res: Response) => {
         return res.status(500).json({
             success: false,
             message: 'Failed to delete blog post',
-            error: error.message
+            error: error instanceof Error ? error.message : 'Unknown error'
         });
     }
 };

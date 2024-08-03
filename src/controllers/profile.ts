@@ -34,7 +34,7 @@ export const getProfile = async (req: Request, res: Response) => {
         return res.status(500).json({
             success: false,
             message: 'Failed to get profile',
-            error: error.message
+            error: error instanceof Error ? error.message : 'Unknown error'
         });
     }
 };
@@ -77,7 +77,7 @@ export const updateProfile = async (req: Request, res: Response) => {
         return res.status(500).json({
             success: false,
             message: 'Failed to get profile',
-            error: error.message
+            error: error instanceof Error ? error.message : 'Unknown error'
         });
     }
 };
@@ -107,7 +107,7 @@ export const getUsersProfile = async (req: Request, res: Response) => {
         return res.status(500).json({
             success: false,
             message: 'Failed to get profile',
-            error: error.message
+            error: error instanceof Error ? error.message : 'Unknown error'
         });
     }
 };

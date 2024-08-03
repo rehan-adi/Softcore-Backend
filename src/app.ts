@@ -84,7 +84,7 @@ app.get('/', (req, res) => {
 // Handle Undefined Routes
 app.all('*', (req, res, next) => {
     const error = new Error(`Can't find ${req.originalUrl} on this server!`);
-    error.status = 404;
+    error: error instanceof Error ? error.message : 'Unknown error';
     next(error);
 });
 
