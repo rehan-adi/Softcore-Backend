@@ -3,37 +3,38 @@ import userModel from '../models/user.model.js';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import config from '../config/config.js';
+import { registerValidation } from '../validations/user.validation.js';
+import { ZodError } from 'zod';
 
 export const signup = async (req: Request, res: Response) => {
     try {
+        // Parse and validate the request body using Zod
+        const parsedData = registerValidation.parse(req.body);
         const { username, fullname, email, password, profilePicture, bio } =
-            req.body;
+            parsedData;
 
-        if (!username || !fullname || !email || !password || !bio) {
-            return res
-                .status(400)
-                .json({ success: false, message: 'All fields are required' });
-        }
-
-        const oldUser = await userModel.findOne({ email: email });
-
+        // Check if the user already exists
+        const oldUser = await userModel.findOne({ email });
         if (oldUser) {
             return res
                 .status(400)
                 .json({ success: false, message: 'User already exists' });
         }
 
-        const hashpassword = await bcrypt.hash(password, 10);
+        // Hash the password before storing it in the database
+        const hashedPassword = await bcrypt.hash(password, 10);
 
+        // Create a new user record
         const User = await userModel.create({
             username,
             fullname,
             email,
-            password: hashpassword,
+            password: hashedPassword,
             profilePicture,
             bio
         });
 
+        // Return the created user details (excluding the password)
         return res.status(201).json({
             success: true,
             User: {
@@ -47,6 +48,14 @@ export const signup = async (req: Request, res: Response) => {
             message: 'User created successfully'
         });
     } catch (error) {
+        // Handle validation errors from Zod
+        if (error instanceof ZodError) {
+            return res.status(400).json({
+                success: false,
+                message: error.errors.map((e) => e.message)
+            });
+        }
+        // Log the error and return a server error response
         console.error(error);
         return res.status(500).json({
             success: false,
