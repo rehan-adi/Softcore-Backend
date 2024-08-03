@@ -3,13 +3,16 @@ import userModel from '../models/user.model.js';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import config from '../config/config.js';
-import { registerValidation } from '../validations/user.validation.js';
+import {
+    signinValidation,
+    signupValidation
+} from '../validations/user.validation.js';
 import { ZodError } from 'zod';
 
 export const signup = async (req: Request, res: Response) => {
     try {
         // Parse and validate the request body using Zod
-        const parsedData = registerValidation.parse(req.body);
+        const parsedData = signupValidation.parse(req.body);
         const { username, fullname, email, password, profilePicture, bio } =
             parsedData;
 
@@ -37,7 +40,7 @@ export const signup = async (req: Request, res: Response) => {
         // Return the created user details (excluding the password)
         return res.status(201).json({
             success: true,
-            User: {
+            user: {
                 id: User._id,
                 username: User.username,
                 fullname: User.fullname,
@@ -67,15 +70,10 @@ export const signup = async (req: Request, res: Response) => {
 
 export const signin = async (req: Request, res: Response) => {
     try {
-        const { email, password } = req.body;
+        const parsedData = signinValidation.parse(req.body);
+        const { email, password } = parsedData;
 
-        if (!email || !password) {
-            return res
-                .status(400)
-                .json({ success: false, message: 'All fields are required' });
-        }
-
-        const user = await userModel.findOne({ email: email });
+        const user = await userModel.findOne({ email });
 
         if (!user) {
             return res.status(404).json({
@@ -85,9 +83,9 @@ export const signin = async (req: Request, res: Response) => {
             });
         }
 
-        const passwordmatch = await bcrypt.compare(password, user.password);
+        const passwordMatch = await bcrypt.compare(password, user.password);
 
-        if (!passwordmatch) {
+        if (!passwordMatch) {
             return res.status(401).json({
                 success: false,
                 message: 'Incorrect password. Please try again.'
@@ -103,7 +101,7 @@ export const signin = async (req: Request, res: Response) => {
         res.cookie('token', token, {
             maxAge: 72 * 60 * 60 * 1000,
             httpOnly: true,
-            secure: false,
+            secure: true,
             sameSite: 'none'
         });
 
@@ -120,6 +118,14 @@ export const signin = async (req: Request, res: Response) => {
             message: 'Login successful'
         });
     } catch (error) {
+        // Handle validation errors from Zod
+        if (error instanceof ZodError) {
+            return res.status(400).json({
+                success: false,
+                message: error.errors.map((e) => e.message)
+            });
+        }
+        // Log the error and return a server error response
         console.error(error);
         return res.status(500).json({
             success: false,
