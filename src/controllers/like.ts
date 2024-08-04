@@ -1,10 +1,11 @@
 import { Request, Response } from 'express';
 import postModel from '../models/post.model.js';
+import { CustomRequest } from '../interfaces/interfaces.js';
 
-export const like = async (req: Request, res: Response) => {
+export const like = async (req: CustomRequest, res: Response) => {
     try {
         const postId = req.params.postId;
-        const userId = req.user.id;
+        const userId = req.user?.id;
 
         const post = await postModel.findById(postId);
         if (!post) {

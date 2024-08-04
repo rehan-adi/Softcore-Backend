@@ -1,11 +1,12 @@
 import { Request, Response } from 'express';
 import userModel from '../models/user.model.js';
 import postModel from '../models/post.model.js';
+import { CustomRequest } from '../interfaces/interfaces.js';
 
 // create profile
-export const getProfile = async (req: Request, res: Response) => {
+export const getProfile = async (req: CustomRequest, res: Response) => {
     try {
-        const userId = req.user.id;
+        const userId = req.user?.id;
 
         const checkProfile = await userModel
             .findById(userId)
@@ -40,12 +41,12 @@ export const getProfile = async (req: Request, res: Response) => {
 };
 
 // update profile
-export const updateProfile = async (req: Request, res: Response) => {
+export const updateProfile = async (req: CustomRequest, res: Response) => {
     try {
         const { username, bio } = req.body;
         // const image = req.file ? `/uploads/${req.file.filename}` : null;
         const image = req.file ? req.file.path : null;
-        const userId = req.user.id;
+        const userId = req.user?.id;
         const profile = await userModel.findById(userId);
 
         if (!profile) {

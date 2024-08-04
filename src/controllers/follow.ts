@@ -1,10 +1,11 @@
 import { Request, Response } from 'express';
 import userModel from '../models/user.model.js';
 import mongoose from 'mongoose';
+import { CustomRequest } from '../interfaces/interfaces.js';
 
-export const followUser = async (req: Request, res: Response) => {
+export const followUser = async (req: CustomRequest, res: Response) => {
     try {
-        const userId = req.user.id;
+        const userId = req.user?.id;
         const followUserId = req.params.id;
 
         if (!mongoose.Types.ObjectId.isValid(followUserId)) {
@@ -49,9 +50,9 @@ export const followUser = async (req: Request, res: Response) => {
     }
 };
 
-export const unfollowUser = async (req: Request, res: Response) => {
+export const unfollowUser = async (req: CustomRequest, res: Response) => {
     try {
-        const userId = req.user.id;
+        const userId = req.user?.id;
         const unfollowUserId = req.params.id;
 
         if (!mongoose.Types.ObjectId.isValid(unfollowUserId)) {
@@ -97,9 +98,9 @@ export const unfollowUser = async (req: Request, res: Response) => {
     }
 };
 
-export const getFollowingList = async (req: Request, res: Response) => {
+export const getFollowingList = async (req: CustomRequest, res: Response) => {
     try {
-        const userId = req.user.id;
+        const userId = req.user?.id;
         const user = await userModel
             .findById(userId)
             .populate('following', 'username email profilePicture');
@@ -121,9 +122,9 @@ export const getFollowingList = async (req: Request, res: Response) => {
     }
 };
 
-export const getFollowersList = async (req: Request, res: Response) => {
+export const getFollowersList = async (req: CustomRequest, res: Response) => {
     try {
-        const userId = req.user.id;
+        const userId = req.user?.id;
 
         const user = await userModel.findById(userId).populate({
             path: 'followers',
