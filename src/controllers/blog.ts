@@ -147,7 +147,8 @@ export const updateBlog = async (req: CustomRequest, res: Response) => {
     try {
         const postId = req.params.id;
         const userId = req.user?.id;
-        const { body } = req;
+
+        const parsedData = createBlogValidation.partial().parse(req.body);
 
         const post = await postModel.findById(postId);
         if (!post) {
@@ -164,9 +165,11 @@ export const updateBlog = async (req: CustomRequest, res: Response) => {
             });
         }
 
-        const updatedPost = await postModel.findByIdAndUpdate(postId, body, {
-            new: true
-        });
+        const updatedPost = await postModel.findByIdAndUpdate(
+            postId,
+            { $set: parsedData },
+            { new: true }
+        );
 
         if (!updatedPost) {
             return res.status(404).json({
