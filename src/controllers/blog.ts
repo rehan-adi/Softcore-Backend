@@ -67,8 +67,8 @@ export const createBlog = async (req: CustomRequest, res: Response) => {
 
 // get all blog
 export const getAllBlogPosts = async (req: Request, res: Response) => {
-    const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 10;
+    const page = req.query.page ? parseInt(req.query.page as string) : 1;
+    const limit = req.query.limit ? parseInt(req.query.limit as string) : 10;
     const skip = (page - 1) * limit;
 
     try {
@@ -157,7 +157,7 @@ export const updateBlog = async (req: CustomRequest, res: Response) => {
             });
         }
 
-        if (post.author.toString() !== userId) {
+        if (post.author?.toString() !== userId) {
             return res.status(403).json({
                 success: false,
                 message: 'You are not authorized to update this post'
@@ -212,7 +212,7 @@ export const deleteBlog = async (req: CustomRequest, res: Response) => {
             });
         }
 
-        if (post.author.toString() !== userId) {
+        if (post.author?.toString() !== userId) {
             return res.status(403).json({
                 success: false,
                 message: 'You are not authorized to delete this post'
