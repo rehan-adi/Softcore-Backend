@@ -1,4 +1,5 @@
 import { Document, Schema } from 'mongoose';
+import { Request } from 'express';
 
 export interface User extends Document {
     username: string;
@@ -11,4 +12,8 @@ export interface User extends Document {
     following?: Schema.Types.ObjectId[];
     bio?: string;
     isPremium?: boolean;
+}
+
+export interface CustomRequest extends Request {
+    user?: { id: string };
 }

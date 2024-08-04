@@ -4,10 +4,7 @@ import postModel from '../models/post.model.js';
 import categoryModel from '../models/category.model.js';
 import { createBlogValidation } from '../validations/blog.validation.js';
 import { ZodError } from 'zod';
-
-interface CustomRequest extends Request {
-    user?: { id: string };
-}
+import { CustomRequest } from '../interfaces/interfaces.js';
 
 // create a new blog
 export const createBlog = async (req: CustomRequest, res: Response) => {
