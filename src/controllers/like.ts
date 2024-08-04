@@ -1,25 +1,30 @@
 import { Request, Response } from 'express';
 import postModel from '../models/post.model.js';
 import { CustomRequest } from '../interfaces/interfaces.js';
+import mongoose from 'mongoose';
 
 export const like = async (req: CustomRequest, res: Response) => {
     try {
         const postId = req.params.postId;
         const userId = req.user?.id;
 
+        if (!userId) {
+            return res.status(401).json({ error: 'User not authenticated' });
+        }
+        const userObjectId = new mongoose.Types.ObjectId(userId);
+
         const post = await postModel.findById(postId);
         if (!post) {
             return res.status(404).json({ error: 'Post not found' });
         }
 
-        // Check if the user has already liked the post
-        if (post.likes.includes(userId)) {
+        if (post.likes.some((like) => like.equals(userObjectId))) {
             return res
                 .status(400)
                 .json({ error: 'User has already liked this post' });
         }
 
-        post.likes.push(userId);
+        post.likes.push(userObjectId);
         await post.save();
 
         res.json({

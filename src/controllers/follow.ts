@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import userModel from '../models/user.model.js';
-import mongoose from 'mongoose';
+import mongoose, { Types } from 'mongoose';
 import { CustomRequest } from '../interfaces/interfaces.js';
 
 export const followUser = async (req: CustomRequest, res: Response) => {
@@ -14,8 +14,15 @@ export const followUser = async (req: CustomRequest, res: Response) => {
                 .json({ success: false, message: 'Invalid user ID' });
         }
 
-        const user = await userModel.findById(userId);
-        const followUser = await userModel.findById(followUserId);
+        // Convert string IDs to ObjectId
+        const userObjectId = new Types.ObjectId(userId);
+        const followUserObjectId = new Types.ObjectId(followUserId);
+
+        // Fetch users from the database
+        const [user, followUser] = await Promise.all([
+            userModel.findById(userObjectId),
+            userModel.findById(followUserObjectId)
+        ]);
 
         if (!user || !followUser) {
             return res
@@ -23,18 +30,19 @@ export const followUser = async (req: CustomRequest, res: Response) => {
                 .json({ success: false, message: 'User not found' });
         }
 
-        if (user.following.includes(followUserId)) {
+        if (user.following?.includes(followUserObjectId.toString())) {
             return res.status(400).json({
                 success: false,
                 message: 'You are already following this user'
             });
         }
 
-        user.following.push(followUserId);
-        followUser.followers.push(userId);
+        // Add to following and followers lists
+        user.following.push(followUserObjectId);
+        followUser.followers.push(userObjectId);
 
-        await user.save();
-        await followUser.save();
+        // Save both users in parallel
+        await Promise.all([user.save(), followUser.save()]);
 
         res.status(200).json({
             success: true,

@@ -30,7 +30,7 @@ export const searchUsers = async (req: Request, res: Response) => {
             user: user
         });
     } catch (error) {
-        console.error(`Error in searchUsers: ${error.message}`);
+        console.error(`Error in searchUsers: ${error}`);
         return res.status(500).json({
             success: false,
             message: 'Failed to search users',
@@ -81,7 +81,7 @@ export const searchPosts = async (req: Request, res: Response) => {
             posts
         });
     } catch (error) {
-        console.error(`Error in searchPosts: ${error.message}`);
+        console.error(`Error in searchPosts: ${error}`);
         return res.status(500).json({
             success: false,
             message: 'Failed to search posts',
