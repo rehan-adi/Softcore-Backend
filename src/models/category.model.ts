@@ -13,6 +13,6 @@ const categorySchema = new mongoose.Schema(
     { timestamps: true }
 );
 
-const categoryModel = mongoose.model('Blog_category_model', categorySchema);
+const categoryModel = mongoose.model('Category', categorySchema);
 
 export default categoryModel;

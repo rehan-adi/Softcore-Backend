@@ -17,7 +17,7 @@ const postSchema = new mongoose.Schema(
         tags: [{ type: String, trim: true }],
         category: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'Blog_category_model'
+            ref: 'Category'
         }
     },
     { timestamps: true }
