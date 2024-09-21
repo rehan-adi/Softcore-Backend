@@ -4,20 +4,20 @@ import postModel from '../models/post.model.js';
 
 export const searchUsers = async (req: Request, res: Response) => {
     try {
-        const { username } = req.query;
+        const { query: username } = req.query;
 
-        if (!username) {
+        if (!username || typeof username !== 'string') {
             return res.status(400).json({
                 success: false,
-                message: 'Username is required'
+                message: 'Valid username is required'
             });
         }
 
-        const user = await userModel.findOne({
+        const users = await userModel.find({
             username: { $regex: username, $options: 'i' }
-        });
+        })
 
-        if (!user) {
+        if (!users) {
             return res.status(404).json({
                 success: false,
                 message: 'User not found'
@@ -26,8 +26,8 @@ export const searchUsers = async (req: Request, res: Response) => {
 
         return res.status(200).json({
             success: true,
-            message: 'User found',
-            user: user
+            message: 'User found successfully',
+            user: users
         });
     } catch (error) {
         console.error(`Error in searchUsers: ${error}`);
