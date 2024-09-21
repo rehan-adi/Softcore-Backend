@@ -1,17 +1,17 @@
-import { Request, Response } from 'express';
+import { ZodError } from 'zod';
 import mongoose from 'mongoose';
+import { Request, Response } from 'express';
 import postModel from '../models/post.model.js';
 import categoryModel from '../models/category.model.js';
-import { createBlogValidation } from '../validations/blog.validation.js';
-import { ZodError } from 'zod';
 import { CustomRequest } from '../interfaces/interfaces.js';
+import { createBlogValidation } from '../validations/blog.validation.js';
 
 // create a new blog
 export const createBlog = async (req: CustomRequest, res: Response) => {
     try {
         // Parse and validate the request body using Zod
         const parsedData = createBlogValidation.parse(req.body);
-        const { title, content, tags, category } = parsedData;
+        const { content, tags, category } = parsedData;
 
         // Handle file upload if present
         const image = req.file ? req.file.path : null;
@@ -26,7 +26,6 @@ export const createBlog = async (req: CustomRequest, res: Response) => {
 
         // Create a new blog post
         const newBlog = await postModel.create({
-            title,
             content,
             author,
             image,
@@ -38,7 +37,6 @@ export const createBlog = async (req: CustomRequest, res: Response) => {
         return res.status(201).json({
             success: true,
             data: {
-                title: newBlog.title,
                 content: newBlog.content,
                 author: newBlog.author,
                 image: newBlog.image,
