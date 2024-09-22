@@ -10,16 +10,16 @@ const commentSchema = new mongoose.Schema(
         },
         author: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'Blog_user_model',
+            ref: 'User',
             required: true
         },
         post: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'Blog_post',
+            ref: 'Post',
             required: true
         },
         likes: [
-            { type: mongoose.Schema.Types.ObjectId, ref: 'Blog_user_model' }
+            { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
         ]
     },
     { timestamps: true }
