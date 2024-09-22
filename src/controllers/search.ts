@@ -13,14 +13,16 @@ export const searchUsers = async (req: Request, res: Response) => {
             });
         }
 
-        const users = await userModel.find({
-            username: { $regex: username, $options: 'i' }
-        })
+        const users = await userModel
+            .find({
+                username: { $regex: username, $options: 'i' }
+            })
+            .select('-password');
 
-        if (!users) {
+        if (users.length === 0) {
             return res.status(404).json({
                 success: false,
-                message: 'User not found'
+                message: 'No users found matching your search.'
             });
         }
 
