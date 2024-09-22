@@ -22,12 +22,6 @@ export const signupValidation = z.object({
         })
         .regex(/[a-z]/, {
             message: 'Password must contain at least one lowercase letter'
-        })
-        .regex(/[0-9]/, {
-            message: 'Password must contain at least one number'
-        })
-        .regex(/[\W_]/, {
-            message: 'Password must contain at least one special character'
         }),
     profilePicture: z.string().optional(),
     bio: z.string().optional()
@@ -47,11 +41,5 @@ export const signinValidation = z.object({
         })
         .regex(/[a-z]/, {
             message: 'Password must contain at least one lowercase letter'
-        })
-        .regex(/[0-9]/, {
-            message: 'Password must contain at least one number'
-        })
-        .regex(/[\W_]/, {
-            message: 'Password must contain at least one special character'
         })
 });
