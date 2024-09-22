@@ -1,45 +1,33 @@
 import { z } from 'zod';
 
-// Define validation schema for Sign up
 export const signupValidation = z.object({
     username: z
         .string()
-        .min(1, { message: 'username is required' })
-        .transform((val) => val.trim()),
+        .min(2, 'Username must be at least 2 characters')
+        .max(20, 'Username must be at most 20 characters'),
     fullname: z
         .string()
-        .min(1, { message: 'fullname is required' })
-        .transform((val) => val.trim()),
+        .min(2, 'Full Name must be at least 2 characters')
+        .max(20, 'Full Name must be at most 20 characters'),
     email: z
         .string()
-        .email({ message: 'Invalid email address format' })
-        .transform((val) => val.trim().toLowerCase()),
+        .email('Invalid email address')
+        .regex(/^[^\s@]+@[^\s@]+\.[^\s@]+$/, 'Invalid email format'),
     password: z
         .string()
-        .min(6, { message: 'Password must be at least 6 characters long' })
-        .regex(/[A-Z]/, {
-            message: 'Password must contain at least one uppercase letter'
-        })
-        .regex(/[a-z]/, {
-            message: 'Password must contain at least one lowercase letter'
-        }),
+        .min(6, 'Password must be at least 6 characters')
+        .max(15, 'Password must be at most 15 characters'),
     profilePicture: z.string().optional(),
     bio: z.string().optional()
 });
 
-// Define validation schema for Sign in
 export const signinValidation = z.object({
     email: z
         .string()
-        .email({ message: 'Invalid email address format' })
-        .transform((val) => val.trim().toLowerCase()),
+        .email('Invalid email address')
+        .regex(/^[^\s@]+@[^\s@]+\.[^\s@]+$/, 'Invalid email format'),
     password: z
         .string()
-        .min(6, { message: 'Password must be at least 6 characters long' })
-        .regex(/[A-Z]/, {
-            message: 'Password must contain at least one uppercase letter'
-        })
-        .regex(/[a-z]/, {
-            message: 'Password must contain at least one lowercase letter'
-        })
+        .min(6, 'Password must be at least 6 characters')
+        .max(15, 'Password must be at most 15 characters')
 });
