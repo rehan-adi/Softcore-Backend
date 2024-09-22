@@ -22,7 +22,7 @@ export const searchUsers = async (req: Request, res: Response) => {
         if (users.length === 0) {
             return res.status(404).json({
                 success: false,
-                message: 'No users found matching your search.'
+                message: 'No users found.'
             });
         }
 
