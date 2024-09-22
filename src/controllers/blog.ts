@@ -77,7 +77,7 @@ export const getAllBlogPosts = async (req: Request, res: Response) => {
             .populate({
                 path: 'author',
                 select: 'username profilePicture fullname',
-                model: 'Blog_user_model'
+                model: 'User'
             })
             .populate('category', 'name');
         const totalBlogPosts = await postModel.countDocuments();
