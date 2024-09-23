@@ -6,7 +6,7 @@ const postSchema = new mongoose.Schema(
             type: String,
             required: true,
             trim: true,
-            minlength: [10, 'Content should have at least 10 characters']
+            minlength: [1, 'Content should have at least 1 characters']
         },
         author: {
             type: mongoose.Schema.Types.ObjectId,

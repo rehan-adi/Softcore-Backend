@@ -3,7 +3,7 @@ import { z } from 'zod';
 export const createBlogValidation = z.object({
     content: z
         .string()
-        .min(10, { message: 'Content should have at least 10 characters' })
+        .min(1, { message: 'Content should have at least 1 characters' })
         .transform((val) => val.trim()),
     tags: z.array(z.string()).optional(),
     category: z
