@@ -13,7 +13,7 @@ export const signup = async (req: Request, res: Response) => {
     try {
         // Parse and validate the request body using Zod
         const parsedData = signupValidation.parse(req.body);
-        const { username, fullname, email, password, profilePicture, bio } =
+        const { username, fullname, email, password, profilePicture } =
             parsedData;
 
         // Check if the user already exists
@@ -34,7 +34,6 @@ export const signup = async (req: Request, res: Response) => {
             email,
             password: hashedPassword,
             profilePicture,
-            bio
         });
 
         // Return the created user details (excluding the password)
