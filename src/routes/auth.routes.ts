@@ -23,7 +23,7 @@ authRouter.get(
         session: false
     }),
     (req, res) => {
-        const token = req.user.token;
+        const token = req.user?.token;
         res.redirect(`/?token=${token}`);
     }
 );
