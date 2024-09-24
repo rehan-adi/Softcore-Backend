@@ -3,11 +3,10 @@ import mongoose from 'mongoose';
 import { Request, Response } from 'express';
 import postModel from '../models/post.model.js';
 import categoryModel from '../models/category.model.js';
-import { CustomRequest } from '../interfaces/interfaces.js';
 import { createBlogValidation } from '../validations/blog.validation.js';
 
 // create a new blog
-export const createBlog = async (req: CustomRequest, res: Response) => {
+export const createBlog = async (req: Request, res: Response) => {
     try {
         // Parse and validate the request body using Zod
         const parsedData = createBlogValidation.parse(req.body);
@@ -141,7 +140,7 @@ export const getPostsByCategory = async (req: Request, res: Response) => {
 };
 
 // update a blog post
-export const updateBlog = async (req: CustomRequest, res: Response) => {
+export const updateBlog = async (req: Request, res: Response) => {
     try {
         const postId = req.params.id;
         const userId = req.user?.id;
@@ -194,7 +193,7 @@ export const updateBlog = async (req: CustomRequest, res: Response) => {
 };
 
 // delete a blog post
-export const deleteBlog = async (req: CustomRequest, res: Response) => {
+export const deleteBlog = async (req: Request, res: Response) => {
     try {
         const postId = req.params.id;
         const userId = req.user?.id;

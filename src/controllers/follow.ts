@@ -1,17 +1,20 @@
 import { Request, Response } from 'express';
 import userModel from '../models/user.model.js';
 import mongoose, { Types } from 'mongoose';
-import { CustomRequest } from '../interfaces/interfaces.js';
 
-export const followUser = async (req: CustomRequest, res: Response) => {
+export const followUser = async (req: Request, res: Response) => {
     try {
         const userId = req.user?.id;
         const followUserId = req.params.id;
 
+        // Check if user is authenticated
+        if (!userId) {
+            return res.status(401).json({ success: false, message: 'User not authenticated' });
+        }
+
+        // Validate followUserId
         if (!mongoose.Types.ObjectId.isValid(followUserId)) {
-            return res
-                .status(400)
-                .json({ success: false, message: 'Invalid user ID' });
+            return res.status(400).json({ success: false, message: 'Invalid user ID' });
         }
 
         // Convert string IDs to ObjectId
@@ -24,13 +27,18 @@ export const followUser = async (req: CustomRequest, res: Response) => {
             userModel.findById(followUserObjectId)
         ]);
 
+        // Check if users exist
         if (!user || !followUser) {
-            return res
-                .status(404)
-                .json({ success: false, message: 'User not found' });
+            return res.status(404).json({ success: false, message: 'User not found' });
         }
 
-        if (user.following?.includes(followUserObjectId.toString())) {
+        // Initialize following if undefined
+        if (!user.following) {
+            user.following = []; // Initialize as an empty array
+        }
+
+        // Check if already following
+        if (user.following.includes(followUserObjectId.toString())) {
             return res.status(400).json({
                 success: false,
                 message: 'You are already following this user'
@@ -58,7 +66,8 @@ export const followUser = async (req: CustomRequest, res: Response) => {
     }
 };
 
-export const unfollowUser = async (req: CustomRequest, res: Response) => {
+
+export const unfollowUser = async (req: Request, res: Response) => {
     try {
         const userId = req.user?.id;
         const unfollowUserId = req.params.id;
@@ -106,7 +115,7 @@ export const unfollowUser = async (req: CustomRequest, res: Response) => {
     }
 };
 
-export const getFollowingList = async (req: CustomRequest, res: Response) => {
+export const getFollowingList = async (req: Request, res: Response) => {
     try {
         const userId = req.user?.id;
         const user = await userModel
@@ -130,7 +139,7 @@ export const getFollowingList = async (req: CustomRequest, res: Response) => {
     }
 };
 
-export const getFollowersList = async (req: CustomRequest, res: Response) => {
+export const getFollowersList = async (req: Request, res: Response) => {
     try {
         const userId = req.user?.id;
 

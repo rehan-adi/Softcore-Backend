@@ -1,9 +1,8 @@
 import { Request, Response } from 'express';
 import postModel from '../models/post.model.js';
-import { CustomRequest } from '../interfaces/interfaces.js';
 import mongoose from 'mongoose';
 
-export const like = async (req: CustomRequest, res: Response) => {
+export const like = async (req: Request, res: Response) => {
     try {
         const postId = req.params.postId;
         const userId = req.user?.id;

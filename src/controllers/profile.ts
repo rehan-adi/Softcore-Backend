@@ -1,10 +1,9 @@
 import { Request, Response } from 'express';
 import userModel from '../models/user.model.js';
 import postModel from '../models/post.model.js';
-import { CustomRequest } from '../interfaces/interfaces.js';
 
 // create profile
-export const getProfile = async (req: CustomRequest, res: Response) => {
+export const getProfile = async (req: Request, res: Response) => {
     try {
         const userId = req.user?.id;
 
@@ -41,7 +40,7 @@ export const getProfile = async (req: CustomRequest, res: Response) => {
 };
 
 // update profile
-export const updateProfile = async (req: CustomRequest, res: Response) => {
+export const updateProfile = async (req: Request, res: Response) => {
     try {
         const { username, bio } = req.body;
         // const image = req.file ? `/uploads/${req.file.filename}` : null;

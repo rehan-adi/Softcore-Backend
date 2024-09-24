@@ -1,6 +1,18 @@
 import { NextFunction, Request, Response } from 'express';
-import jwt from 'jsonwebtoken';
+import jwt, { JwtPayload } from 'jsonwebtoken';
 import config from '../config/config.js';
+
+interface UserPayload extends JwtPayload {
+    id: string;    
+    token: string; 
+}
+
+declare global {
+    namespace Express {
+        interface User extends UserPayload {}
+    }
+}
+
 
 export const checkLogin = async (
     req: Request,
@@ -18,10 +30,7 @@ export const checkLogin = async (
         }
 
         try {
-            const decoded = jwt.verify(
-                token.replace('Bearer ', ''),
-                config.JWT_SECRET
-            );
+            const decoded = jwt.verify(token.replace('Bearer ', ''), config.JWT_SECRET) as UserPayload;
             req.user = decoded;
             next();
         } catch (error) {

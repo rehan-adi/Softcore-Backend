@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import commentModel from '../models/comment.model.js';
 import postModel from '../models/post.model.js';
 import userModel from '../models/user.model.js';
-import { CustomRequest } from '../interfaces/interfaces.js';
+
 
 export const createComment = async (req: Request, res: Response) => {
     try {
@@ -73,7 +73,7 @@ export const getAllComments = async (req: Request, res: Response) => {
     }
 };
 
-export const updateComment = async (req: CustomRequest, res: Response) => {
+export const updateComment = async (req: Request, res: Response) => {
     try {
         const commentId = req.params.commentId;
         const userId = req.user?.id;
@@ -136,7 +136,7 @@ export const updateComment = async (req: CustomRequest, res: Response) => {
     }
 };
 
-export const deleteComments = async (req: CustomRequest, res: Response) => {
+export const deleteComments = async (req: Request, res: Response) => {
     try {
         const commentId = req.params.commentId;
         const userId = req.user?.id;
