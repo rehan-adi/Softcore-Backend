@@ -20,11 +20,15 @@ passport.use(
                 let user = await userModel.findOne({ googleId: profile.id });
 
                 if (!user) {
+
+                    const email = (profile.emails && profile.emails[0].value) || '';
+                    const profilePicture = (profile.photos && profile.photos[0].value) || '';
+
                     user = new userModel({
                         googleId: profile.id,
                         username: profile.displayName,
-                        email: profile.emails[0].value,
-                        profilePicture: profile.photos[0].value
+                        email,
+                        profilePicture
                     });
                     await user.save();
                 }
