@@ -14,6 +14,6 @@ export interface User extends Document {
     isPremium?: boolean;
 }
 
-export interface CustomRequest extends Request {
-    user?: { id: string };
-}
+// export interface CustomRequest extends Request {
+//     user?: { id: string };
+// }
