@@ -8,6 +8,7 @@ export const updateProfileValidation = z.object({
         .optional(),
     bio: z
         .string()
+        .min(10, 'Bio must be at least 10 characters long')
         .max(200, 'Bio must be at most 200 characters long')
         .optional(),
     image: z.string().optional()
