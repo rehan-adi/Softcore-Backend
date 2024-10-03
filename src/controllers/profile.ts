@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import userModel from '../models/user.model.js';
 import postModel from '../models/post.model.js';
+import { updateProfileValidation } from '../validations/profile.validation.js';
 
 // create profile
 export const getProfile = async (req: Request, res: Response) => {
@@ -42,9 +43,12 @@ export const getProfile = async (req: Request, res: Response) => {
 // update profile
 export const updateProfile = async (req: Request, res: Response) => {
     try {
-        const { username, bio } = req.body;
-        // const image = req.file ? `/uploads/${req.file.filename}` : null;
+        
+        const parsedData = updateProfileValidation.parse(req.body);
+        const { username, bio } =  parsedData;
+        
         const image = req.file ? req.file.path : null;
+
         const userId = req.user?.id;
         const profile = await userModel.findById(userId);
 
