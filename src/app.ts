@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { NextFunction, Request, Response } from 'express';
 import env from 'dotenv';
 import cors from 'cors';
 import hpp from 'hpp';
@@ -82,7 +82,7 @@ app.get('/', (req, res) => {
 });
 
 // Handle Undefined Routes
-app.all('*', (req, res, next) => {
+app.all('*', (req: Request, res: Response, next: NextFunction) => {
     const error = new Error(`Can't find ${req.originalUrl} on this server!`);
     error: error instanceof Error ? error.message : 'Unknown error';
     next(error);
