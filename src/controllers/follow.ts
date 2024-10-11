@@ -196,3 +196,47 @@ export const getFollowersList = async (req: Request, res: Response) => {
         });
     }
 };
+
+
+export const getFollowingStatus = async (req: Request, res: Response) => {
+    try {
+        const userId = req.user?.id;
+        const followUserId = req.params.id;
+
+        // Check if user is authenticated
+        if (!userId) {
+            return res.status(401).json({ success: false, message: 'User not authenticated' });
+        }
+
+        // Validate followUserId
+        if (!mongoose.Types.ObjectId.isValid(followUserId)) {
+            return res.status(400).json({ success: false, message: 'Invalid user ID' });
+        }
+
+        const followUserObjectId = new mongoose.Types.ObjectId(followUserId);
+
+        // Find the authenticated user
+        const user = await userModel.findById(userId);
+        if (!user) {
+            return res.status(404).json({ success: false, message: 'User not found' });
+        }
+
+        const following = user.following || [];
+
+        // Check if the user is following the target user
+        const isFollowing = following.some(followingId => followingId.toString() === followUserObjectId.toString());
+
+        return res.status(200).json({
+            success: true,
+            isFollowing,
+        });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({
+            success: false,
+            message: 'Failed to get following status',
+            error: error instanceof Error ? error.message : 'Unknown error',
+        });
+    }
+};
+
