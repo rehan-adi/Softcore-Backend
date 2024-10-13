@@ -1,7 +1,7 @@
 import express from 'express';
 import passport from 'passport';
 import { checkLogin } from '../middlewares/auth.middleware.js';
-import { signup, signin, logout, changePassword } from '../controllers/auth.js';
+import { signup, signin, logout, changePassword, deleteAccount } from '../controllers/auth.js';
 
 const authRouter = express.Router();
 
@@ -9,6 +9,7 @@ authRouter.post('/signup', signup);
 authRouter.post('/signin', signin);
 authRouter.get('/logout', logout);
 authRouter.put('/change-password', checkLogin, changePassword);
+authRouter.delete('/delete-account', checkLogin, deleteAccount);
 
 // Google OAuth routes
 authRouter.get(
