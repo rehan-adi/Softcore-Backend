@@ -4,6 +4,7 @@ import jwt from 'jsonwebtoken';
 import config from '../config/config.js';
 import { Request, Response } from 'express';
 import userModel from '../models/user.model.js';
+import postModel from '../models/post.model.js';
 import {
     signinValidation,
     signupValidation
@@ -187,6 +188,36 @@ export const changePassword = async (req: Request, res: Response) => {
         return res.status(500).json({
             success: false,
             message: 'Failed to change password',
+            error: error instanceof Error ? error.message : 'Unknown error'
+        });
+    }
+};
+
+export const deleteAccount = async (req: Request, res: Response) => {
+    try {
+        const usedId = req.user?.id;
+
+        const user = await userModel.findById(usedId);
+
+        if (!user) {
+            return res
+                .status(404)
+                .json({ success: false, message: 'User not found' });
+        };
+
+        // delete user details
+        await userModel.findByIdAndDelete(usedId);
+
+        // delete post of user
+        await postModel.deleteMany({ author: usedId });
+
+        return res.status(200).json({ success: true, message: 'Account deleted successfully' });
+
+    } catch (error) {
+        console.error('Error during deleting account:', error);
+        return res.status(500).json({
+            success: false,
+            message: 'Failed to delete account',
             error: error instanceof Error ? error.message : 'Unknown error'
         });
     }
