@@ -43,10 +43,9 @@ export const getProfile = async (req: Request, res: Response) => {
 // update profile
 export const updateProfile = async (req: Request, res: Response) => {
     try {
-        
         const parsedData = updateProfileValidation.parse(req.body);
-        const { username, bio } =  parsedData;
-        
+        const { username, bio } = parsedData;
+
         const image = req.file ? req.file.path : null;
 
         const userId = req.user?.id;
@@ -99,7 +98,11 @@ export const getUsersProfile = async (req: Request, res: Response) => {
             });
         }
 
-        const userPosts = await postModel.find({ author: userId });
+        const userPosts = await postModel.find({ author: userId }).populate({
+            path: 'author',
+            select: 'username profilePicture fullname',
+            model: 'User'
+        });
 
         return res.status(200).json({
             success: true,
