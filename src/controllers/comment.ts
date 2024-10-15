@@ -71,14 +71,19 @@ export const getComments = async (req: Request, res: Response) => {
         const comment = await commentModel
             .find({ post: postId })
             .populate('author', 'fullname profilePicture');
-        const totalComments = await commentModel.countDocuments({
-            post: postId
-        });
+
+            if (comment.length === 0) {
+                return res.status(200).json({
+                    success: true,
+                    comments: [],
+                    totalComments: 0
+                });
+            }
 
         return res.status(200).json({
             success: true,
             comments: comment,
-            totalComments
+            totalComments: comment.length
         });
     } catch (error) {
         console.error(error);
