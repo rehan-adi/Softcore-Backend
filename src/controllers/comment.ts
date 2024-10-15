@@ -1,20 +1,17 @@
+import { z } from 'zod';
 import { Request, Response } from 'express';
-import commentModel from '../models/comment.model.js';
-import postModel from '../models/post.model.js';
 import userModel from '../models/user.model.js';
-
+import postModel from '../models/post.model.js';
+import commentModel from '../models/comment.model.js';
+import { commentValidation } from '../validations/comment.validation.js';
 
 export const createComment = async (req: Request, res: Response) => {
     try {
         const { postId } = req.params;
-        const { authorId, content } = req.body;
+        const authorId = req.user?.id;
 
-        if (!authorId || !content) {
-            return res.status(400).json({
-                success: false,
-                message: 'Author ID and content are required'
-            });
-        }
+        const parseData = commentValidation.parse(req.body);
+        const { content } = parseData;
 
         const post = await postModel.findById(postId);
         const user = await userModel.findById(authorId);
@@ -43,6 +40,13 @@ export const createComment = async (req: Request, res: Response) => {
             message: 'Comment created'
         });
     } catch (error) {
+        if (error instanceof z.ZodError) {
+            return res.status(400).json({
+                success: false,
+                message: 'Validation failed',
+                errors: error.errors
+            });
+        }
         console.error(error);
         return res.status(500).json({
             success: false,
@@ -52,16 +56,29 @@ export const createComment = async (req: Request, res: Response) => {
     }
 };
 
-export const getAllComments = async (req: Request, res: Response) => {
+export const getComments = async (req: Request, res: Response) => {
+    const { postId } = req.params;
+
+    const post = await postModel.findById(postId);
+
+    if (!post) {
+        return res
+            .status(404)
+            .json({ success: false, message: 'Post not found' });
+    }
+
     try {
-        const allComment = await commentModel
-            .find()
-            .populate('author', 'username profilePicture');
+        const comment = await commentModel
+            .find({ post: postId })
+            .populate('author', 'fullname profilePicture');
+        const totalComments = await commentModel.countDocuments({
+            post: postId
+        });
+
         return res.status(200).json({
             success: true,
-            comments: {
-                allComment: allComment
-            }
+            comments: comment,
+            totalComments
         });
     } catch (error) {
         console.error(error);
