@@ -4,6 +4,6 @@ import { checkLogin } from '../middlewares/auth.middleware.js';
 
 const likeRouter = express.Router();
 
-likeRouter.post('/:postId', checkLogin, like);
+likeRouter.post('/:postId/toggle-like', checkLogin, like)
 
 export default likeRouter;

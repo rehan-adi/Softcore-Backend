@@ -1,6 +1,6 @@
+import mongoose from 'mongoose';
 import { Request, Response } from 'express';
 import postModel from '../models/post.model.js';
-import mongoose from 'mongoose';
 
 export const like = async (req: Request, res: Response) => {
     try {
@@ -10,32 +10,41 @@ export const like = async (req: Request, res: Response) => {
         if (!userId) {
             return res.status(401).json({ error: 'User not authenticated' });
         }
+        
         const userObjectId = new mongoose.Types.ObjectId(userId);
-
         const post = await postModel.findById(postId);
+
         if (!post) {
             return res.status(404).json({ error: 'Post not found' });
         }
 
-        if (post.likes.some((like) => like.equals(userObjectId))) {
-            return res
-                .status(400)
-                .json({ error: 'User has already liked this post' });
+        // Check if the user has already liked the post
+        const hasLiked = post.likes.some((like) => like.equals(userObjectId));
+
+        if (hasLiked) {
+            post.likes = post.likes.filter((like) => !like.equals(userObjectId));
+            await post.save();
+            return res.json({
+                success: true,
+                post,
+                totalLikes: post.likes.length,
+                message: 'Post unliked successfully'
+            });
+        } else {
+            post.likes.push(userObjectId);
+            await post.save();
+            return res.json({
+                success: true,
+                post,
+                totalLikes: post.likes.length,
+                message: 'Post liked successfully'
+            });
         }
-
-        post.likes.push(userObjectId);
-        await post.save();
-
-        res.json({
-            success: true,
-            post,
-            totalLikes: post.likes.length
-        });
     } catch (error) {
         console.error(error);
         return res.status(500).json({
             success: false,
-            message: 'Failed to like',
+            message: 'Failed to like/unlike',
             error: error instanceof Error ? error.message : 'Unknown error'
         });
     }
