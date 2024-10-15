@@ -1,7 +1,7 @@
 import express from 'express';
 import {
     createComment,
-    getAllComments,
+    getComments,
     updateComment,
     deleteComments
 } from '../controllers/comment.js';
@@ -9,8 +9,8 @@ import { checkLogin } from '../middlewares/auth.middleware.js';
 
 const commentRouter = express.Router();
 
-commentRouter.post('/post/:postId/comments', checkLogin, createComment);
-commentRouter.get('/allcomments', getAllComments);
+commentRouter.post('/post/:postId', checkLogin, createComment);
+commentRouter.get('/:postId', getComments);
 commentRouter.patch('/:commentId', checkLogin, updateComment);
 commentRouter.delete('/:commentId', checkLogin, deleteComments);
 
