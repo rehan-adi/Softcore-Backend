@@ -39,6 +39,8 @@ export const createBlog = async (req: Request, res: Response) => {
             }
         }
 
+        console.log(imageUrl);
+
         // Create a new blog post
         const newBlog = await postModel.create({
             content,
@@ -55,7 +57,7 @@ export const createBlog = async (req: Request, res: Response) => {
             data: {
                 content: newBlog.content,
                 author: newBlog.author,
-                image: newBlog.image,
+                image: imageUrl,
                 tags: newBlog.tags,
                 category: categoryName.name
             },
