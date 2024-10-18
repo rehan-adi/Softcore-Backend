@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 import { Request, Response } from 'express';
 import postModel from '../models/post.model.js';
 import categoryModel from '../models/category.model.js';
+import { uploadOnCloudinary } from '../utils/cloudinary.js';
 import { createBlogValidation } from '../validations/blog.validation.js';
 
 // create a new blog
@@ -23,14 +24,30 @@ export const createBlog = async (req: Request, res: Response) => {
             await categoryName.save();
         }
 
+        let imageUrl = null;
+
+        if (req.file) {
+            try {
+                const uploadedImage = await uploadOnCloudinary(req.file.path);
+                imageUrl = uploadedImage ? uploadedImage.secure_url : null;
+            } catch (uploadError) {
+                return res.status(500).json({
+                    success: false,
+                    message: 'Image upload to Cloudinary failed',
+                    error: uploadError instanceof Error ? uploadError.message : 'Unknown error'
+                });
+            }
+        }
+
         // Create a new blog post
         const newBlog = await postModel.create({
             content,
             author,
-            image,
+            image: imageUrl,
             tags,
             category: categoryName._id
         });
+
 
         // Respond with the created blog details
         return res.status(201).json({
