@@ -30,6 +30,7 @@ export const createBlog = async (req: Request, res: Response) => {
             try {
                 const uploadedImage = await uploadOnCloudinary(req.file.path);
                 imageUrl = uploadedImage ? uploadedImage.secure_url : null;
+                console.log('Uploaded Image URL:', imageUrl);
             } catch (uploadError) {
                 return res.status(500).json({
                     success: false,
@@ -48,6 +49,7 @@ export const createBlog = async (req: Request, res: Response) => {
             category: categoryName._id
         });
 
+        console.log('Uploaded Image URL:', imageUrl);
 
         // Respond with the created blog details
         return res.status(201).json({
