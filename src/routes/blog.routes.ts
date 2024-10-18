@@ -5,7 +5,8 @@ import {
     getAllBlogPosts,
     getPostsByCategory,
     updateBlog,
-    deleteBlog
+    deleteBlog,
+    getPostsById
 } from '../controllers/blog.js';
 
 //middlware to check login
@@ -17,7 +18,10 @@ const blogRouter = express.Router();
 blogRouter.post('/create', checkLogin, upload.single('image'), createBlog);
 
 // Route to get all blog posts
-blogRouter.get('/allblogs', getAllBlogPosts);
+blogRouter.get('/post/allpost', getAllBlogPosts);
+
+// Get one post by ID
+blogRouter.get('/post/:postId', getPostsById);
 
 // Route to get posts by category
 blogRouter.get('/category/:categoryId', getPostsByCategory);

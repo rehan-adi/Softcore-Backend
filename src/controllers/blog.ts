@@ -125,6 +125,41 @@ export const getAllBlogPosts = async (req: Request, res: Response) => {
     }
 };
 
+// get post by id 
+export const getPostsById = async (req: Request, res: Response) => {
+    const postId = req.params.postId;
+
+    try {
+        const postExists = await postModel.findById(postId);
+
+        if (!postExists) {
+            return res.status(404).json({
+                success: false,
+                message: 'Post not found'
+            });
+        }
+
+        const posts = await postModel
+            .findById(postId)
+            .populate('author', 'fullname')
+
+        return res.status(200).json({
+            success: true,
+            data: {
+                posts
+            },
+            message: 'Posts retrieved successfully'
+        });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({
+            success: false,
+            message: 'Failed to get post details',
+            error: error instanceof Error ? error.message : 'Unknown error'
+        });
+    }
+};
+
 // get posts by category
 export const getPostsByCategory = async (req: Request, res: Response) => {
     const categoryId = req.params.categoryId;
@@ -135,7 +170,7 @@ export const getPostsByCategory = async (req: Request, res: Response) => {
         if (!categoryExists) {
             return res.status(404).json({
                 success: false,
-                message: 'Category not found'
+                message: 'Post not found'
             });
         }
 
