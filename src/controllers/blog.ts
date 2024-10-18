@@ -12,10 +12,11 @@ export const createBlog = async (req: Request, res: Response) => {
         // Parse and validate the request body using Zod
         const parsedData = createBlogValidation.parse(req.body);
         const { content, tags, category } = parsedData;
+        const author = req.user?.id;
 
         // Handle file upload if present
         const image = req.file ? req.file.path : null;
-        const author = req.user?.id;
+        console.log(image);
 
         // Check if the category already exists, if not, create it
         let categoryName = await categoryModel.findOne({ name: category });
@@ -38,6 +39,8 @@ export const createBlog = async (req: Request, res: Response) => {
                     error: uploadError instanceof Error ? uploadError.message : 'Unknown error'
                 });
             }
+        }  else {
+            console.log('No file received'); // Log if no file is received
         }
 
         // Create a new blog post
