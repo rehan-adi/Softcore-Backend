@@ -15,7 +15,7 @@ import passport from './utils/passport.js';
 import errorMiddleware from './middlewares/errorMiddleware.js';
 
 import authRouter from './routes/auth.routes.js';
-import blogRouter from './routes/blog.routes.js';
+import postRouter from './routes/post.routes.js';
 import commentRouter from './routes/comment.routes.js';
 import likeRouter from './routes/like.routes.js';
 import profileRouter from './routes/profile.routes.js';
@@ -68,7 +68,7 @@ app.use(passport.initialize());
 
 // Routes
 app.use('/api/v1/auth', authRouter);
-app.use('/api/v1/blogs', blogRouter);
+app.use('/api/v1/posts', postRouter);
 app.use('/api/v1/comments', commentRouter);
 app.use('/api/v1/likes', likeRouter);
 app.use('/api/v1/profile', profileRouter);
