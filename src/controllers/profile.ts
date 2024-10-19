@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import userModel from '../models/user.model.js';
 import postModel from '../models/post.model.js';
+import { uploadOnCloudinary } from '../utils/cloudinary.js';
 import { updateProfileValidation } from '../validations/profile.validation.js';
 
 // create profile
@@ -46,7 +47,14 @@ export const updateProfile = async (req: Request, res: Response) => {
         const parsedData = updateProfileValidation.parse(req.body);
         const { username, bio } = parsedData;
 
-        const image = req.file ? req.file.path : null;
+        const localImagePath = req.file ? req.file.path : null;
+
+        let imageUrl: string | null = null;
+
+        if (localImagePath) {
+            const uploadResponse = await uploadOnCloudinary(localImagePath);
+            imageUrl = uploadResponse ? uploadResponse.secure_url : null;
+        }
 
         const userId = req.user?.id;
         const profile = await userModel.findById(userId);
@@ -60,7 +68,7 @@ export const updateProfile = async (req: Request, res: Response) => {
 
         const updatedProfileData = {
             ...(username && { username }), // Update username if provided
-            ...(image && { profilePicture: image }), // Update profile picture if provided
+            ...(imageUrl && { profilePicture: imageUrl }), // Update profile picture if provided
             ...(bio && { bio }) // Update bio if provided
         };
 
