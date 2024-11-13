@@ -27,7 +27,7 @@ authRouter.get(
     }),
     (req, res) => {
         const token = req.user?.token;
-        res.redirect(`/?token=${token}`);
+        res.redirect(`http://localhost:5173/google/callback/?token=${token}`);
     }
 );
 

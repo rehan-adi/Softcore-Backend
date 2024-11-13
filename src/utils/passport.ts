@@ -1,9 +1,9 @@
-import passport from 'passport';
-import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
-import userModel from '../models/user.model.js';
-import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
+import jwt from 'jsonwebtoken';
+import passport from 'passport';
 import config from '../config/config.js';
+import userModel from '../models/user.model.js';
+import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 
 dotenv.config();
 
@@ -11,8 +11,8 @@ passport.use(
     new GoogleStrategy(
         {
             clientID: config.GOOGLE_CLIENT_ID,
-            clientSecret: config.GOOGLE_CLIENT_SECRET, // Fix this line
-            callbackURL: 'http://localhost:3333/api/auth/google/callback'
+            clientSecret: config.GOOGLE_CLIENT_SECRET,
+            callbackURL: 'http://localhost:3333/api/v1/auth/google/callback'
         },
         async (accessToken, refreshToken, profile, done) => {
             try {
@@ -21,22 +21,23 @@ passport.use(
                 if (!user) {
                     const email = (profile.emails && profile.emails[0].value) || '';
                     const profilePicture = (profile.photos && profile.photos[0].value) || '';
+                    const fullname = profile.displayName;
 
                     user = new userModel({
                         googleId: profile.id,
                         username: profile.displayName,
                         email,
-                        profilePicture
+                        profilePicture,
+                        fullname
                     });
                     await user.save();
                 }
 
-                const payload = { id: user.id }; // Ensure user.id is correctly defined
+                const payload = { id: user.id };
                 const token = jwt.sign(payload, config.JWT_SECRET, {
-                    expiresIn: '1h'
+                    expiresIn: '24h'
                 });
 
-                // Pass only the necessary user data along with the token
                 done(null, { id: user.id, username: user.username, token });
             } catch (err) {
                 done(err, false);
