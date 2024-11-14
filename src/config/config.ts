@@ -10,6 +10,7 @@ interface Config {
     JWT_SECRET: string;
     GOOGLE_CLIENT_ID: string;
     GOOGLE_CLIENT_SECRET: string;
+    GOOGLE_CALLBACK: string;
     CLOUDINARY_CLOUD_NAME: string;
     CLOUDINARY_API_KEY: string;
     RAZORPAY_SECRET: string;
@@ -23,6 +24,7 @@ const config: Config = {
     JWT_SECRET: process.env.JWT_SECRET as string,
     GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID as string,
     GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET as string,
+    GOOGLE_CALLBACK: process.env.GOOGLE_CALLBACK as string,
     CLOUDINARY_CLOUD_NAME: process.env.CLOUDINARY_CLOUD_NAME as string,
     CLOUDINARY_API_KEY: process.env.CLOUDINARY_API_KEY as string,
     RAZORPAY_SECRET: process.env.RAZORPAY_SECRET as string
