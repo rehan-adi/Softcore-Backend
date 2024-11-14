@@ -27,7 +27,7 @@ authRouter.get(
     }),
     (req, res) => {
         const token = req.user?.token;
-        res.redirect(`http://localhost:5173/google/callback/?token=${token}`);
+        res.redirect(`https://softcoreapp.vercel.app/google/callback/?token=${token}`);
     }
 );
 
