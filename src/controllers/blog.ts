@@ -4,13 +4,13 @@ import { Request, Response } from 'express';
 import postModel from '../models/post.model.js';
 import categoryModel from '../models/category.model.js';
 import { uploadOnCloudinary } from '../utils/cloudinary.js';
-import { createBlogValidation } from '../validations/blog.validation.js';
+import { createPostValidation, updatePostValidation } from '../validations/blog.validation.js';
 
 // create a new blog
 export const createBlog = async (req: Request, res: Response) => {
     try {
         // Parse and validate the request body using Zod
-        const parsedData = createBlogValidation.parse(req.body);
+        const parsedData = createPostValidation.parse(req.body);
         const { content, tags, category } = parsedData;
         const author = req.user?.id;
 
@@ -202,7 +202,7 @@ export const updateBlog = async (req: Request, res: Response) => {
         const postId = req.params.id;
         const userId = req.user?.id;
 
-        const parsedData = createBlogValidation.partial().parse(req.body);
+        const parsedData = updatePostValidation.parse(req.body);
 
         const post = await postModel.findById(postId);
         if (!post) {
