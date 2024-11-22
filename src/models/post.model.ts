@@ -4,9 +4,7 @@ const postSchema = new mongoose.Schema(
     {
         content: {
             type: String,
-            required: true,
             trim: true,
-            minlength: [1, 'Content should have at least 1 characters']
         },
         author: {
             type: mongoose.Schema.Types.ObjectId,
