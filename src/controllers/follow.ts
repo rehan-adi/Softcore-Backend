@@ -139,7 +139,7 @@ export const getFollowingList = async (req: Request, res: Response) => {
         const userId = req.user?.id;
         const user = await userModel
             .findById(userId)
-            .populate('following', 'username email profilePicture');
+            .populate('following', 'username fullname profilePicture');
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
