@@ -165,7 +165,7 @@ export const getFollowersList = async (req: Request, res: Response) => {
         // Fetch user with followers populated
         const user = await userModel.findById(userId).populate({
             path: 'followers',
-            select: 'username email profilePicture bio'
+            select: 'username fullname profilePicture'
         });
 
         // Check if user exists
