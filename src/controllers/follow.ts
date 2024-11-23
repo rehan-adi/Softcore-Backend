@@ -225,6 +225,46 @@ export const getFollowersList = async (req: Request, res: Response) => {
     }
 };
 
+// Get Any User's Followers List
+export const getUserFollowersList = async (req: Request, res: Response) => {
+    try {
+        const userId = req.params.id;
+
+        // Fetch user with followers populated
+        const user = await userModel.findById(userId).populate({
+            path: 'followers',
+            select: 'username fullname profilePicture'
+        });
+
+        // Check if user exists
+        if (!user) {
+            return res.status(404).json({ success: false, message: 'User not found' });
+        }
+
+        // Ensure followers is defined and has users
+        if (!user.followers || user.followers.length === 0) {
+            return res.status(200).json({
+                success: true,
+                followers: [],
+                message: 'No followers found'
+            });
+        }
+        
+        // Return the followers list
+        res.status(200).json({
+            success: true,
+            followers: user.followers, // followers will be of the type populated
+        });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({
+            success: false,
+            message: 'Failed to get followers list',
+            error: error instanceof Error ? error.message : 'Unknown error',
+        });
+    }
+};
+
 export const getFollowingStatus = async (req: Request, res: Response) => {
     try {
         const userId = req.user?.id;
