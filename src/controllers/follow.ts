@@ -134,6 +134,7 @@ export const unfollowUser = async (req: Request, res: Response) => {
     }
 };
 
+// Get Logged-in User's Following List
 export const getFollowingList = async (req: Request, res: Response) => {
     try {
         const userId = req.user?.id;
@@ -158,6 +159,33 @@ export const getFollowingList = async (req: Request, res: Response) => {
     }
 };
 
+// Get Any User's Following List
+export const getUserFollowingList = async (req: Request, res: Response) => {
+    try {
+        const userId = req.params.id;
+
+        const user = await userModel
+            .findById(userId)
+            .populate('following', 'username fullname profilePicture');
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+        res.status(200).json({
+            success: true,
+            message: 'User followings',
+            following: user.following
+        });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({
+            success: false,
+            message: 'Failde to get user followings',
+            error: error instanceof Error ? error.message : 'Unknown error'
+        });
+    }
+};
+
+// Get Logged-in User's Followers List
 export const getFollowersList = async (req: Request, res: Response) => {
     try {
         const userId = req.user?.id;
@@ -196,7 +224,6 @@ export const getFollowersList = async (req: Request, res: Response) => {
         });
     }
 };
-
 
 export const getFollowingStatus = async (req: Request, res: Response) => {
     try {
