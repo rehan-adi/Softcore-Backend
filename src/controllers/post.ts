@@ -10,6 +10,8 @@ import {
     updatePostValidation
 } from '../validations/post.validation.js';
 
+const CACHE_KEY = 'posts:all';
+
 // create a new post
 export const createPost = async (req: Request, res: Response) => {
     try {
@@ -20,7 +22,6 @@ export const createPost = async (req: Request, res: Response) => {
 
         // Handle file upload if present
         const image = req.file ? req.file.path : null;
-        console.log(image);
 
         // Check if the category already exists, if not, create it
         let categoryName = await categoryModel.findOne({ name: category });
@@ -58,8 +59,7 @@ export const createPost = async (req: Request, res: Response) => {
             category: categoryName._id
         });
 
-        const cacheKey = `posts:all`;
-        await client.del(cacheKey);
+        await client.del(CACHE_KEY);
 
         // Respond with the created post details
         return res.status(201).json({
@@ -93,16 +93,15 @@ export const createPost = async (req: Request, res: Response) => {
 
 // get all post
 export const getAllPosts = async (req: Request, res: Response) => {
-    const cacheKey = `posts:all`;
     const cacheTTL = 43200;
 
     try {
-        const getDataFromCashe = await client.get(cacheKey);
+        const getDataFromCache = await client.get(CACHE_KEY);
 
-        if (getDataFromCashe) {
+        if (getDataFromCache) {
             return res.status(200).json({
                 success: true,
-                data: JSON.parse(getDataFromCashe),
+                data: JSON.parse(getDataFromCache),
                 message: 'All posts retrieved successfully'
             });
         }
@@ -117,17 +116,13 @@ export const getAllPosts = async (req: Request, res: Response) => {
             })
             .populate('category', 'name');
 
-        const responseData = {
-            blogPost: allPosts
-        };
-
-        await client.set(cacheKey, JSON.stringify(responseData), {
+        await client.set(CACHE_KEY, JSON.stringify(allPosts), {
             EX: cacheTTL
         });
 
         return res.status(200).json({
             success: true,
-            data: responseData,
+            data: allPosts,
             message: 'All posts retrieved successfully'
         });
     } catch (error) {
@@ -247,8 +242,7 @@ export const updatePost = async (req: Request, res: Response) => {
             });
         }
 
-        const cacheKey = `post:${postId}`;
-        await client.del(cacheKey);
+        await client.del(CACHE_KEY);
 
         return res.status(200).json({
             success: true,
@@ -303,8 +297,7 @@ export const deletePost = async (req: Request, res: Response) => {
             });
         }
 
-        const cacheKey = `post:${postId}`;
-        await client.del(cacheKey);
+        await client.del(CACHE_KEY);
 
         return res.status(200).json({
             success: true,
