@@ -16,7 +16,8 @@ export const getProfile = async (req: Request, res: Response) => {
         if (!checkProfile) {
             return res.status(404).json({
                 success: false,
-                message: 'Profile not found'
+                message:
+                    'Your profile could not be found. Please ensure you are logged in with the correct account.'
             });
         }
 
@@ -28,7 +29,6 @@ export const getProfile = async (req: Request, res: Response) => {
         return res.status(200).json({
             success: true,
             profile: checkProfile,
-            postCount: userPosts.length,
             posts: userPosts
         });
     } catch (error) {
