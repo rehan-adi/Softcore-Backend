@@ -35,7 +35,6 @@ export const createBlog = async (req: Request, res: Response) => {
             try {
                 const uploadedImage = await uploadOnCloudinary(req.file.path);
                 imageUrl = uploadedImage ? uploadedImage.secure_url : null;
-                console.log('Uploaded Image URL:', imageUrl);
             } catch (uploadError) {
                 return res.status(500).json({
                     success: false,
@@ -59,7 +58,8 @@ export const createBlog = async (req: Request, res: Response) => {
             category: categoryName._id
         });
 
-        console.log('Uploaded Image URL:', imageUrl);
+        const cacheKey = `posts:all`;
+        await client.del(cacheKey);
 
         // Respond with the created blog details
         return res.status(201).json({
@@ -71,7 +71,7 @@ export const createBlog = async (req: Request, res: Response) => {
                 tags: newBlog.tags,
                 category: categoryName.name
             },
-            message: 'Blog created successfully'
+            message: 'Post created successfully'
         });
     } catch (error) {
         // Handle validation errors from Zod
@@ -85,7 +85,7 @@ export const createBlog = async (req: Request, res: Response) => {
         console.error(error);
         return res.status(500).json({
             success: false,
-            message: 'Failed to create blog',
+            message: 'Failed to create post',
             error: error instanceof Error ? error.message : 'Unknown error'
         });
     }
@@ -93,11 +93,7 @@ export const createBlog = async (req: Request, res: Response) => {
 
 // get all post
 export const getAllBlogPosts = async (req: Request, res: Response) => {
-    const page = req.query.page ? parseInt(req.query.page as string) : 1;
-    const limit = req.query.limit ? parseInt(req.query.limit as string) : 10;
-    const skip = (page - 1) * limit;
-
-    const cacheKey = `blogs:page:${page}:limit:${limit}`;
+    const cacheKey = `posts:all`;
     const cacheTTL = 43200;
 
     try {
@@ -113,8 +109,7 @@ export const getAllBlogPosts = async (req: Request, res: Response) => {
 
         const allBlogPosts = await postModel
             .find()
-            .skip(skip)
-            .limit(limit)
+            .sort({ createdAt: -1 })
             .populate({
                 path: 'author',
                 select: 'username profilePicture fullname',
@@ -122,16 +117,8 @@ export const getAllBlogPosts = async (req: Request, res: Response) => {
             })
             .populate('category', 'name');
 
-        const totalBlogPosts = await postModel.countDocuments();
-
         const responseData = {
-            blogPost: allBlogPosts,
-            pagination: {
-                total: totalBlogPosts,
-                page,
-                limit,
-                totalPages: Math.ceil(totalBlogPosts / limit)
-            }
+            blogPost: allBlogPosts
         };
 
         await client.set(cacheKey, JSON.stringify(responseData), {
