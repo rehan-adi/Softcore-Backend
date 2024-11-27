@@ -3,8 +3,8 @@ import jwt, { JwtPayload } from 'jsonwebtoken';
 import config from '../config/config.js';
 
 interface UserPayload extends JwtPayload {
-    id: string;    
-    token: string; 
+    id: string;
+    token: string;
 }
 
 declare global {
@@ -12,7 +12,6 @@ declare global {
         interface User extends UserPayload {}
     }
 }
-
 
 export const checkLogin = async (
     req: Request,
@@ -25,26 +24,30 @@ export const checkLogin = async (
         if (!token) {
             return res.status(401).json({
                 success: false,
-                message: 'Authentication token is required. Please login.'
+                message:
+                    'You must be logged in to access this feature. Please log in to your account.'
             });
         }
 
         try {
-            const decoded = jwt.verify(token.replace('Bearer ', ''), config.JWT_SECRET) as UserPayload;
+            const decoded = jwt.verify(
+                token.replace('Bearer ', ''),
+                config.JWT_SECRET
+            ) as UserPayload;
             req.user = decoded;
             next();
         } catch (error) {
-            console.error('Token verification failed:', error);
             return res.status(401).json({
                 success: false,
-                message: 'Invalid authentication token. Please login again.'
+                message:
+                    'Your session has expired or the token is invalid. Please log in again to continue.'
             });
         }
     } catch (error) {
-        console.error('Error during authentication check:', error);
         return res.status(500).json({
             success: false,
-            message: 'Internal server error while validating the token.',
+            message:
+                'We encountered an unexpected error while verifying your session. Please try again later.',
             error: error instanceof Error ? error.message : 'Unknown error'
         });
     }
