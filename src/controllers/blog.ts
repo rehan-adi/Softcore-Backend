@@ -1,12 +1,16 @@
 import { ZodError } from 'zod';
 import mongoose from 'mongoose';
+import { client } from '../lib/redis.js';
 import { Request, Response } from 'express';
 import postModel from '../models/post.model.js';
 import categoryModel from '../models/category.model.js';
 import { uploadOnCloudinary } from '../utils/cloudinary.js';
-import { createPostValidation, updatePostValidation } from '../validations/blog.validation.js';
+import {
+    createPostValidation,
+    updatePostValidation
+} from '../validations/blog.validation.js';
 
-// create a new blog
+// create a new post
 export const createBlog = async (req: Request, res: Response) => {
     try {
         // Parse and validate the request body using Zod
@@ -36,10 +40,13 @@ export const createBlog = async (req: Request, res: Response) => {
                 return res.status(500).json({
                     success: false,
                     message: 'Image upload to Cloudinary failed',
-                    error: uploadError instanceof Error ? uploadError.message : 'Unknown error'
+                    error:
+                        uploadError instanceof Error
+                            ? uploadError.message
+                            : 'Unknown error'
                 });
             }
-        }  else {
+        } else {
             console.log('No file received'); // Log if no file is received
         }
 
@@ -84,13 +91,26 @@ export const createBlog = async (req: Request, res: Response) => {
     }
 };
 
-// get all blog
+// get all post
 export const getAllBlogPosts = async (req: Request, res: Response) => {
     const page = req.query.page ? parseInt(req.query.page as string) : 1;
     const limit = req.query.limit ? parseInt(req.query.limit as string) : 10;
     const skip = (page - 1) * limit;
 
+    const cacheKey = `blogs:page:${page}:limit:${limit}`;
+    const cacheTTL = 43200;
+
     try {
+        const getDataFromCashe = await client.get(cacheKey);
+
+        if (getDataFromCashe) {
+            return res.status(200).json({
+                success: true,
+                data: JSON.parse(getDataFromCashe),
+                message: 'All posts retrieved successfully'
+            });
+        }
+
         const allBlogPosts = await postModel
             .find()
             .skip(skip)
@@ -101,31 +121,39 @@ export const getAllBlogPosts = async (req: Request, res: Response) => {
                 model: 'User'
             })
             .populate('category', 'name');
+
         const totalBlogPosts = await postModel.countDocuments();
-        return res.status(200).json({
-            success: true,
-            data: {
-                blogPost: allBlogPosts
-            },
+
+        const responseData = {
+            blogPost: allBlogPosts,
             pagination: {
                 total: totalBlogPosts,
                 page,
                 limit,
                 totalPages: Math.ceil(totalBlogPosts / limit)
-            },
-            message: 'All blogs retrieved successfully'
+            }
+        };
+
+        await client.set(cacheKey, JSON.stringify(responseData), {
+            EX: cacheTTL
+        });
+
+        return res.status(200).json({
+            success: true,
+            data: responseData,
+            message: 'All posts retrieved successfully'
         });
     } catch (error) {
         console.error(error);
         return res.status(500).json({
             success: false,
-            message: 'Failed to get all blog posts',
+            message: 'Failed to get all posts',
             error: error instanceof Error ? error.message : 'Unknown error'
         });
     }
 };
 
-// get post by id 
+// get post by id
 export const getPostsById = async (req: Request, res: Response) => {
     const postId = req.params.postId;
 
@@ -141,7 +169,7 @@ export const getPostsById = async (req: Request, res: Response) => {
 
         const posts = await postModel
             .findById(postId)
-            .populate('author', 'fullname')
+            .populate('author', 'fullname');
 
         return res.status(200).json({
             success: true,
@@ -196,7 +224,7 @@ export const getPostsByCategory = async (req: Request, res: Response) => {
     }
 };
 
-// update a blog post
+// update a post
 export const updateBlog = async (req: Request, res: Response) => {
     try {
         const postId = req.params.id;
@@ -249,7 +277,7 @@ export const updateBlog = async (req: Request, res: Response) => {
     }
 };
 
-// delete a blog post
+// delete a post
 export const deleteBlog = async (req: Request, res: Response) => {
     try {
         const postId = req.params.id;
