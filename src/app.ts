@@ -1,18 +1,17 @@
-import express, { NextFunction, Request, Response } from 'express';
-import env from 'dotenv';
-import cors from 'cors';
 import hpp from 'hpp';
-// import xss from 'xss-clean';
+import cors from 'cors';
+import env from 'dotenv';
 import helmet from 'helmet';
 import morgan from 'morgan';
-import ratelimit from 'express-rate-limit';
-import mongoSanitize from 'express-mongo-sanitize';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 import cookieParser from 'cookie-parser';
 import dbConnect from './db/dbConnect.js';
 import passport from './utils/passport.js';
+import ratelimit from 'express-rate-limit';
+import mongoSanitize from 'express-mongo-sanitize';
 import errorMiddleware from './middlewares/errorMiddleware.js';
+import express, { NextFunction, Request, Response } from 'express';
 
 import authRouter from './routes/auth.routes.js';
 import postRouter from './routes/post.routes.js';

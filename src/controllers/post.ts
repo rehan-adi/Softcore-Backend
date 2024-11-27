@@ -8,7 +8,7 @@ import { uploadOnCloudinary } from '../utils/cloudinary.js';
 import {
     createPostValidation,
     updatePostValidation
-} from '../validations/blog.validation.js';
+} from '../validations/post.validation.js';
 
 // create a new post
 export const createPost = async (req: Request, res: Response) => {
@@ -49,8 +49,8 @@ export const createPost = async (req: Request, res: Response) => {
             console.log('No file received'); // Log if no file is received
         }
 
-        // Create a new blog post
-        const newBlog = await postModel.create({
+        // Create a new post
+        const newPost = await postModel.create({
             content,
             author,
             image: imageUrl,
@@ -61,14 +61,14 @@ export const createPost = async (req: Request, res: Response) => {
         const cacheKey = `posts:all`;
         await client.del(cacheKey);
 
-        // Respond with the created blog details
+        // Respond with the created post details
         return res.status(201).json({
             success: true,
             data: {
-                content: newBlog.content,
-                author: newBlog.author,
+                content: newPost.content,
+                author: newPost.author,
                 image: imageUrl,
-                tags: newBlog.tags,
+                tags: newPost.tags,
                 category: categoryName.name
             },
             message: 'Post created successfully'
@@ -107,7 +107,7 @@ export const getAllPosts = async (req: Request, res: Response) => {
             });
         }
 
-        const allBlogPosts = await postModel
+        const allPosts = await postModel
             .find()
             .sort({ createdAt: -1 })
             .populate({
@@ -118,7 +118,7 @@ export const getAllPosts = async (req: Request, res: Response) => {
             .populate('category', 'name');
 
         const responseData = {
-            blogPost: allBlogPosts
+            blogPost: allPosts
         };
 
         await client.set(cacheKey, JSON.stringify(responseData), {

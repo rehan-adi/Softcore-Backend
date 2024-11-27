@@ -7,7 +7,7 @@ import {
     deletePost,
     getPostsById,
     getPostsByCategory
-} from '../controllers/blog.js';
+} from '../controllers/post.js';
 
 //middlware to check login
 import { checkLogin } from '../middlewares/auth.middleware.js';
