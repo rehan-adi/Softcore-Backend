@@ -303,6 +303,9 @@ export const deletePost = async (req: Request, res: Response) => {
             });
         }
 
+        const cacheKey = `post:${postId}`;
+        await client.del(cacheKey);
+
         return res.status(200).json({
             success: true,
             deletedPostId: postId,
