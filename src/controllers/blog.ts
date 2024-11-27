@@ -11,7 +11,7 @@ import {
 } from '../validations/blog.validation.js';
 
 // create a new post
-export const createBlog = async (req: Request, res: Response) => {
+export const createPost = async (req: Request, res: Response) => {
     try {
         // Parse and validate the request body using Zod
         const parsedData = createPostValidation.parse(req.body);
@@ -92,7 +92,7 @@ export const createBlog = async (req: Request, res: Response) => {
 };
 
 // get all post
-export const getAllBlogPosts = async (req: Request, res: Response) => {
+export const getAllPosts = async (req: Request, res: Response) => {
     const cacheKey = `posts:all`;
     const cacheTTL = 43200;
 
@@ -212,7 +212,7 @@ export const getPostsByCategory = async (req: Request, res: Response) => {
 };
 
 // update a post
-export const updateBlog = async (req: Request, res: Response) => {
+export const updatePost = async (req: Request, res: Response) => {
     try {
         const postId = req.params.id;
         const userId = req.user?.id;
@@ -252,20 +252,20 @@ export const updateBlog = async (req: Request, res: Response) => {
             data: {
                 post: updatedPost
             },
-            message: 'Blog post updated successfully'
+            message: 'Post updated successfully'
         });
     } catch (error) {
         console.error(error);
         return res.status(500).json({
             success: false,
-            message: 'Failed to update blog',
+            message: 'Failed to update post',
             error: error instanceof Error ? error.message : 'Unknown error'
         });
     }
 };
 
 // delete a post
-export const deleteBlog = async (req: Request, res: Response) => {
+export const deletePost = async (req: Request, res: Response) => {
     try {
         const postId = req.params.id;
         const userId = req.user?.id;
@@ -309,7 +309,7 @@ export const deleteBlog = async (req: Request, res: Response) => {
         console.error(error);
         return res.status(500).json({
             success: false,
-            message: 'Failed to delete blog post',
+            message: 'Failed to delete post',
             error: error instanceof Error ? error.message : 'Unknown error'
         });
     }
