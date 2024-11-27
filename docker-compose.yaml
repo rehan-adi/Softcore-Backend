@@ -1,28 +1,39 @@
 services:
-  app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    ports:
-      - "3333:3333"
-    env_file:
-      - .env
-    depends_on:
-      - mongo
-    networks:
-      - my-network
+    app:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        ports:
+            - '3333:3333'
+        env_file:
+            - .env
+        depends_on:
+            - mongo
+            - redis
+        networks:
+            - my-network
 
-  mongo:
-    image: mongo:latest
-    ports:
-      - "27017:27017"
-    volumes:
-      - mongo-data:/data/db
-    networks:
-      - my-network 
+    mongo:
+        image: mongo:latest
+        ports:
+            - '27017:27017'
+        volumes:
+            - mongo-data:/data/db
+        networks:
+            - my-network
+
+    redis:
+        image: redis:alpine
+        ports:
+            - '6379:6379'
+        volumes:
+            - redis-data:/data
+        networks:
+            - my-network
 
 volumes:
-  mongo-data:
+    mongo-data:
+    redis-data:
 
 networks:
-  my-network: 
+    my-network:
