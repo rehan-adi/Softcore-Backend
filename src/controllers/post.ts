@@ -59,7 +59,12 @@ export const createPost = async (req: Request, res: Response) => {
             category: categoryName._id
         });
 
-        await client.del(CACHE_KEY);
+        const cachedPosts = await client.get(CACHE_KEY);
+        if (cachedPosts) {
+            const posts = JSON.parse(cachedPosts);
+            posts.unshift(newPost); // Add new post at the beginning
+            await client.set(CACHE_KEY, JSON.stringify(posts));
+        }
 
         // Respond with the created post details
         return res.status(201).json({
@@ -242,7 +247,15 @@ export const updatePost = async (req: Request, res: Response) => {
             });
         }
 
-        await client.del(CACHE_KEY);
+        const cachedPosts = await client.get(CACHE_KEY);
+        if (cachedPosts) {
+            const posts = JSON.parse(cachedPosts);
+            const postIndex = posts.findIndex((p: any) => p._id === postId);
+            if (postIndex > -1) {
+                posts[postIndex] = updatedPost;
+                await client.set(CACHE_KEY, JSON.stringify(posts));
+            }
+        }
 
         return res.status(200).json({
             success: true,
@@ -297,7 +310,12 @@ export const deletePost = async (req: Request, res: Response) => {
             });
         }
 
-        await client.del(CACHE_KEY);
+        const cachedPosts = await client.get(CACHE_KEY);
+        if (cachedPosts) {
+            const posts = JSON.parse(cachedPosts);
+            const filteredPosts = posts.filter((p: any) => p._id !== postId); // Remove the deleted post
+            await client.set(CACHE_KEY, JSON.stringify(filteredPosts));
+        }
 
         return res.status(200).json({
             success: true,
