@@ -11,4 +11,5 @@ dbConnect()
     })
     .catch((err) => {
         console.error('Failed to connect to MongoDB:', err);
+        process.exit(1); // Gracefully exit if DB connection fails
     });

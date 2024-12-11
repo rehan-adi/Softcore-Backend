@@ -53,7 +53,6 @@ app.use(cookieParser());
 app.use(cors(corsOptions));
 app.use(helmet());
 app.use(hpp());
-// server.use(xss());
 app.use(mongoSanitize());
 app.use(morgan('dev'));
 app.use(limit);
@@ -82,8 +81,7 @@ app.get('/', (req, res) => {
 
 // Handle Undefined Routes
 app.all('*', (req: Request, res: Response, next: NextFunction) => {
-    const error = new Error(`Can't find ${req.originalUrl} on this server!`);
-    error: error instanceof Error ? error.message : 'Unknown error';
+    const error = new Error(`Can't find ${req.method} ${req.originalUrl} on this server!`);
     next(error);
 });
 
