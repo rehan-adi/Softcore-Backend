@@ -59,10 +59,15 @@ export const createPost = async (req: Request, res: Response) => {
             category: categoryName._id
         });
 
+        const populatedPost = await postModel
+            .findById(newPost._id)
+            .populate('author', 'username profilePicture fullname')
+            .populate('category', 'name');
+
         const cachedPosts = await client.get(CACHE_KEY);
         if (cachedPosts) {
             const posts = JSON.parse(cachedPosts);
-            posts.unshift(newPost); // Add new post at the beginning
+            posts.unshift(populatedPost); // Add new post at the beginning
             await client.set(CACHE_KEY, JSON.stringify(posts));
         }
 
@@ -247,12 +252,17 @@ export const updatePost = async (req: Request, res: Response) => {
             });
         }
 
+        const populatedUpdatedPost = await postModel
+            .findById(updatedPost._id)
+            .populate('author', 'username profilePicture fullname')
+            .populate('category', 'name');
+
         const cachedPosts = await client.get(CACHE_KEY);
         if (cachedPosts) {
             const posts = JSON.parse(cachedPosts);
             const postIndex = posts.findIndex((p: any) => p._id === postId);
             if (postIndex > -1) {
-                posts[postIndex] = updatedPost;
+                posts[postIndex] = populatedUpdatedPost;
                 await client.set(CACHE_KEY, JSON.stringify(posts));
             }
         }
@@ -260,7 +270,7 @@ export const updatePost = async (req: Request, res: Response) => {
         return res.status(200).json({
             success: true,
             data: {
-                post: updatedPost
+                post: populatedUpdatedPost
             },
             message: 'Post updated successfully'
         });
