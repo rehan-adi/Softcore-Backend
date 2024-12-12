@@ -11,14 +11,24 @@ import {
 } from '../validations/post.validation.js';
 
 const CACHE_KEY = 'posts:all';
+const PROFILE_CACHE_KEY = (userId: string) => `profile:${userId}`;
+const POSTS_CACHE_KEY = (userId: string) => `posts:${userId}`;
 
 // create a new post
 export const createPost = async (req: Request, res: Response) => {
     try {
-        // Parse and validate the request body using Zod
+        const author = req.user?.id;
+
+        if (!author) {
+            return res.status(401).json({
+                success: false,
+                message: 'You are not authenticated. Please Signin'
+            });
+        }
+
+        // validate the request body using Zod
         const parsedData = createPostValidation.parse(req.body);
         const { content, tags, category } = parsedData;
-        const author = req.user?.id;
 
         // Handle file upload if present
         const image = req.file ? req.file.path : null;
@@ -70,6 +80,9 @@ export const createPost = async (req: Request, res: Response) => {
             posts.unshift(populatedPost); // Add new post at the beginning
             await client.set(CACHE_KEY, JSON.stringify(posts));
         }
+
+        await client.del(PROFILE_CACHE_KEY(author));
+        await client.del(POSTS_CACHE_KEY(author));
 
         // Respond with the created post details
         return res.status(201).json({
@@ -222,6 +235,13 @@ export const updatePost = async (req: Request, res: Response) => {
         const postId = req.params.id;
         const userId = req.user?.id;
 
+        if (!userId) {
+            return res.status(401).json({
+                success: false,
+                message: 'You are not authenticated. Please Signin'
+            });
+        }
+
         const parsedData = updatePostValidation.parse(req.body);
 
         const post = await postModel.findById(postId);
@@ -267,6 +287,9 @@ export const updatePost = async (req: Request, res: Response) => {
             }
         }
 
+        await client.del(PROFILE_CACHE_KEY(userId));
+        await client.del(POSTS_CACHE_KEY(userId));
+
         return res.status(200).json({
             success: true,
             data: {
@@ -289,6 +312,13 @@ export const deletePost = async (req: Request, res: Response) => {
     try {
         const postId = req.params.id;
         const userId = req.user?.id;
+
+        if (!userId) {
+            return res.status(401).json({
+                success: false,
+                message: 'You are not authenticated. Please Signin'
+            });
+        }
 
         if (!mongoose.Types.ObjectId.isValid(postId)) {
             return res
@@ -326,6 +356,9 @@ export const deletePost = async (req: Request, res: Response) => {
             const filteredPosts = posts.filter((p: any) => p._id !== postId); // Remove the deleted post
             await client.set(CACHE_KEY, JSON.stringify(filteredPosts));
         }
+
+        await client.del(PROFILE_CACHE_KEY(userId));
+        await client.del(POSTS_CACHE_KEY(userId));
 
         return res.status(200).json({
             success: true,
