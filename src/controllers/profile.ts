@@ -7,7 +7,7 @@ import { updateProfileValidation } from '../validations/profile.validation.js';
 
 const PROFILE_CACHE_KEY = (userId: string) => `profile:${userId}`;
 const POSTS_CACHE_KEY = (userId: string) => `posts:${userId}`;
-const cacheTTL = 43200;
+const cacheTTL = 10800;
 
 // create profile
 export const getProfile = async (req: Request, res: Response) => {
@@ -17,8 +17,7 @@ export const getProfile = async (req: Request, res: Response) => {
         if (!userId) {
             return res.status(401).json({
                 success: false,
-                message:
-                    'You are not authenticated. Please log in to access this route.'
+                message: 'You are not authenticated. Please Signin'
             });
         }
 
@@ -47,6 +46,7 @@ export const getProfile = async (req: Request, res: Response) => {
 
         const userPosts = await postModel
             .find({ author: userId })
+            .sort({ createdAt: -1 })
             .populate('author', 'username profilePicture fullname')
             .populate('image');
 
@@ -96,8 +96,7 @@ export const updateProfile = async (req: Request, res: Response) => {
         if (!userId) {
             return res.status(401).json({
                 success: false,
-                message:
-                    'You are not authenticated. Please log in to access this route.'
+                message: 'You are not authenticated. Please Signin'
             });
         }
 
@@ -124,6 +123,7 @@ export const updateProfile = async (req: Request, res: Response) => {
 
         await client.del(PROFILE_CACHE_KEY(userId));
         await client.del(POSTS_CACHE_KEY(userId));
+        await client.del('posts:all');
 
         return res.status(200).json({
             success: true,
