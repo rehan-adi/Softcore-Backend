@@ -153,11 +153,14 @@ export const getUsersProfile = async (req: Request, res: Response) => {
             });
         }
 
-        const userPosts = await postModel.find({ author: userId }).populate({
-            path: 'author',
-            select: 'username profilePicture fullname',
-            model: 'User'
-        });
+        const userPosts = await postModel
+            .find({ author: userId })
+            .sort({ createdAt: -1 })
+            .populate({
+                path: 'author',
+                select: 'username profilePicture fullname',
+                model: 'User'
+            });
 
         return res.status(200).json({
             success: true,
